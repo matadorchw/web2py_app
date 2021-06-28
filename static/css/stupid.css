@@ -1,0 +1,25 @@
+/**** underline effect ***/
+a:not(.btn):not(.noeffect):not(.dropdown-toggle) {
+    position: relative
+}
+
+a:not(.btn):not(.noeffect):not(.dropdown-toggle):hover {
+    text-decoration: none;
+    color: #19b5af
+}
+
+a:not(.btn):not(.noeffect):not(.dropdown-toggle):hover:after {
+    width: 100%
+}
+
+a:not(.btn):not(.noeffect):not(.dropdown-toggle):after {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 0;
+    height: 2px;
+    background-color: #19b5af;
+    content: "";
+    transition: width 0.2s;
+}
