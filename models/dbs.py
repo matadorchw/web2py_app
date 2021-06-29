@@ -5,14 +5,14 @@ db.define_table(
     'imei_prefix',
     Field('name', unique=True),
     Field('imei_prefix'),
-    format='%(name)s [%(imei_prefix)s]'
+    format='[%(imei_prefix)s] %(name)s'
 )
 
 db.define_table(
     'imei_section',
     Field('name', unique=True),
     Field('imei_prefix', db.imei_prefix,
-          requires=IS_IN_DB(db, db.imei_prefix.id, '%(name)s [%(imei_prefix)s]')),
+          requires=IS_IN_DB(db, db.imei_prefix.id, '[%(imei_prefix)s] %(name)s')),
     Field('section_start', 'integer', default=0),
     Field('section_end', 'integer', default=999999),
     format='%(name)s [%(imei_prefix)s]'
@@ -23,7 +23,7 @@ db.define_table(
     Field('description', unique=True, label=T('description')),
     Field('req_count', 'integer'),
     Field('imei_prefix', db.imei_prefix,
-          requires=IS_IN_DB(db, db.imei_prefix.id, '%(name)s [%(imei_prefix)s]')),
+          requires=IS_IN_DB(db, db.imei_prefix.id, '[%(imei_prefix)s] %(name)s')),
     Field('create_on', 'datetime', default=request.now, label=T('create time')),
     Field('create_by', db.auth_user, default=auth.user_id, label=T('create by'))
 )
