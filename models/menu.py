@@ -6,8 +6,24 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.menu = [
-    (T('Home'), False, URL('default', 'index'), [])
+    [T('Request'), False, URL('task', 'request')],
+    [T('history'), False, URL('task', 'display')]
 ]
+
+if auth.has_membership('administrators'):
+    response.menu.append([T('manage'), False, None, [
+        [T('user'), False, URL('manage', 'user')],
+        [T('group'), False, URL('manage', 'group')],
+        [T('membership'), False, URL('manage', 'membership')],
+    ]])
+
+    response.menu.append([T('resource'), False, None, [
+        [T('imei_prefix'), False, URL('manage', 'imei_prefix')],
+        [T('imei_section'), False, URL('manage', 'imei_section')],
+    ]])
+
+    response.menu.append([T('view'), False, None, [[T('requests'), False, URL('manage', 'requests')],
+                                                   ]])
 
 # ----------------------------------------------------------------------------------------------------------------------
 # provide shortcuts for development. you can remove everything below in production
@@ -107,4 +123,3 @@ if not configuration.get('app.production'):
              'http://webchat.freenode.net/?channels=web2py'),
         ]),
     ]
-
