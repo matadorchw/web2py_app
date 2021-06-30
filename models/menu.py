@@ -11,19 +11,36 @@ response.menu = [
 ]
 
 if auth.has_membership('administrators'):
-    response.menu.append([T('manage'), False, None, [
-        [T('user'), False, URL('manage', 'user')],
-        [T('group'), False, URL('manage', 'group')],
-        [T('membership'), False, URL('manage', 'membership')],
-    ]])
+    response.menu.append(
+        [
+            T('manage'), False, None,
+            [
+                [T('user'), False, URL('manage', 'user')],
+                [T('group'), False, URL('manage', 'group')],
+                [T('membership'), False, URL('manage', 'membership')],
+            ]
+        ]
+    )
 
-    response.menu.append([T('resource'), False, None, [
-        [T('imei_prefix'), False, URL('manage', 'imei_prefix')],
-        [T('imei_section'), False, URL('manage', 'imei_section')],
-    ]])
+    response.menu.append(
+        [
+            T('resource'), False, None,
+            [
+                [T('imei_prefix'), False, URL('manage', 'imei_prefix')],
+                [T('imei_section'), False, URL('manage', 'imei_section')],
+            ]
+        ]
+    )
 
-    response.menu.append([T('view'), False, None, [[T('requests'), False, URL('manage', 'requests')],
-                                                   ]])
+    response.menu.append(
+        [
+            T('view'), False, None,
+            [
+                [T('requests'), False, URL('manage', 'requests')],
+                [T('imei_assign'), False, URL('manage', 'imei_assign')],
+            ]
+        ]
+    )
 
 # ----------------------------------------------------------------------------------------------------------------------
 # provide shortcuts for development. you can remove everything below in production

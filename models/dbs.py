@@ -1,6 +1,7 @@
 db.auth_user._format = "%(first_name)s"
 # auth.settings.actions_disabled = ['register']
 
+
 db.define_table(
     'imei_prefix',
     Field('name', unique=True),
@@ -27,7 +28,7 @@ db.define_table(
     Field('create_on', 'datetime', default=request.now, label=T('create time')),
     Field('create_by', db.auth_user, default=auth.user_id, label=T('create by'))
 )
-db.request.description.requires = IS_NOT_EMPTY()
+db.request.description.requires = [IS_NOT_EMPTY(), IS_NOT_IN_DB(db, db.request.description)]
 db.request.req_count.requires = IS_NOT_EMPTY()
 db.request.imei_prefix.requires = IS_NOT_EMPTY()
 db.request.create_on.writable = False
@@ -39,3 +40,76 @@ db.define_table(
     Field('assign_start', 'integer'),
     Field('assign_end', 'integer')
 )
+
+
+# functions
+
+def get_imei_left(imei_prefix):
+    total = 0
+    myset = db(db.imei_section.imei_prefix == imei_prefix)
+    for record in myset.select(db.imei_section.ALL):
+        total = total + record.section_end - record.section_start + 1
+    used = 0
+    myset = db((db.request.imei_prefix == imei_prefix) &
+               (db.imei_assign.request == db.request.id))
+    for record in myset.select(db.imei_assign.ALL):
+        used = used + record.assign_end - record.assign_start + 1
+    return total - used
+
+
+def get_imei_section(imei_prefix):
+    result = []
+    myset = db(db.imei_section.imei_prefix == imei_prefix)
+    for record in myset.select(db.imei_section.ALL, orderby=db.imei_section.section_start):
+        result.append((record.section_start, record.section_end))
+    return result
+
+
+def get_imei_assign(imei_prefix):
+    result = []
+    myset = db((db.request.imei_prefix == imei_prefix) &
+               (db.imei_assign.request == db.request.id))
+    for record in myset.select(db.imei_assign.ALL, orderby=db.imei_assign.assign_start):
+        result.append((record.assign_start, record.assign_end))
+    return result
+
+
+def assign_imei(req_id):
+    myset = db(db.request.id == req_id)
+    for record in myset.select():
+        print(record.req_count, record.imei_prefix)
+        r_total = get_imei_section(record.imei_prefix)
+        r_used = get_imei_assign(record.imei_prefix)
+        free_list = []
+        for b1, e1 in r_total:
+            free = range(b1, e1 + 1)
+            for b2, e2 in r_used:
+                if b2 > e1:
+                    break
+                if e2 < b1:
+                    continue
+                for v in range(b1, e1 + 1):
+                    if b2 <= v <= e2:
+                        free.remove(v)
+            if free:
+                free_list.append(free)
+
+            free_count = 0
+            for free in free_list:
+                free_count += len(free)
+
+            if free_count >= record.req_count:
+                break
+
+        assign = []
+        done = False
+        for free in free_list:
+            for v in free:
+                if len(assign) < record.req_count:
+                    assign.append(v)
+                else:
+                    done = True
+                    break
+            if done:
+                break
+        print(assign)

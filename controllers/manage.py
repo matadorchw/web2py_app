@@ -47,9 +47,13 @@ def imei_section():
 
 
 @auth.requires_membership('administrators')
+def imei_assign():
+    return manage_table(T('imei_assign'), db.imei_assign)
+
+
+@auth.requires_membership('administrators')
 def requests():
     grid = SQLFORM.smartgrid(db.request,
-                             # links=[dict(header='', body=lambda row: get_body_by_row(row.id))],
                              orderby=~db.request.create_on,
                              csv=False)
     response.view = 'default/grid.html'
