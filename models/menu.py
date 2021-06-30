@@ -7,13 +7,13 @@
 
 response.menu = [
     [T('Request'), False, URL('task', 'request')],
-    [T('history'), False, URL('task', 'display')]
+    [T('History'), False, URL('task', 'display')]
 ]
 
 if auth.has_membership('administrators'):
     response.menu.append(
         [
-            T('manage'), False, None,
+            T('Manage'), False, None,
             [
                 [T('user'), False, URL('manage', 'user')],
                 [T('group'), False, URL('manage', 'group')],
@@ -24,7 +24,7 @@ if auth.has_membership('administrators'):
 
     response.menu.append(
         [
-            T('resource'), False, None,
+            T('Resource'), False, None,
             [
                 [T('imei_prefix'), False, URL('manage', 'imei_prefix')],
                 [T('imei_section'), False, URL('manage', 'imei_section')],
@@ -34,7 +34,7 @@ if auth.has_membership('administrators'):
 
     response.menu.append(
         [
-            T('view'), False, None,
+            T('View'), False, None,
             [
                 [T('requests'), False, URL('manage', 'requests')],
                 [T('imei_assign'), False, URL('manage', 'imei_assign')],
