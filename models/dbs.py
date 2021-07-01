@@ -14,8 +14,8 @@ db.define_table(
     Field('name', unique=True),
     Field('imei_prefix', db.imei_prefix,
           requires=IS_IN_DB(db, db.imei_prefix.id, '[%(imei_prefix)s] %(name)s')),
-    Field('section_start', 'integer', default=0),
-    Field('section_end', 'integer', default=999999),
+    Field('section_start', 'integer', default=0, represent=lambda v, row: "%06d" % v),
+    Field('section_end', 'integer', default=999999, represent=lambda v, row: "%06d" % v),
     format='%(name)s [%(imei_prefix)s]'
 )
 
@@ -37,8 +37,8 @@ db.request.create_by.writable = False
 db.define_table(
     'imei_assign',
     Field('request', db.request, requires=IS_IN_DB(db, db.request.id, '%(description)s')),
-    Field('assign_start', 'integer'),
-    Field('assign_end', 'integer')
+    Field('assign_start', 'integer', represent=lambda v, row: "%06d" % v),
+    Field('assign_end', 'integer', represent=lambda v, row: "%06d" % v)
 )
 
 
@@ -72,6 +72,23 @@ def get_imei_assign(imei_prefix):
     for record in myset.select(db.imei_assign.ALL, orderby=db.imei_assign.assign_start):
         result.append((record.assign_start, record.assign_end))
     return result
+
+
+def get_scope_of_request(imei_assign_id):
+    myset = db(
+        (db.imei_assign.id == imei_assign_id) &
+        (db.request.id == db.imei_assign.request) &
+        (db.imei_prefix.id == db.request.imei_prefix)
+    )
+
+    r = myset.select(db.imei_prefix.imei_prefix, db.imei_assign.assign_start, db.imei_assign.assign_end).first()
+    return "[%s%06d - %s%06d] %d" % (
+        r.imei_prefix.imei_prefix,
+        r.imei_assign.assign_start,
+        r.imei_prefix.imei_prefix,
+        r.imei_assign.assign_end,
+        r.imei_assign.assign_end - r.imei_assign.assign_start + 1
+    )
 
 
 def get_free_list(r_total, r_used, req_count):

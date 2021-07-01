@@ -53,6 +53,6 @@ def imei_assign():
 
 @auth.requires_membership('administrators')
 def requests():
-    grid = SQLFORM.smartgrid(db.request, csv=False)
+    grid = SQLFORM.smartgrid(db.request, maxtextlength=32, csv=False)
     response.view = 'default/grid.html'
     return dict(title=T('requests'), grid=grid)

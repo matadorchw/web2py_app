@@ -34,6 +34,7 @@ def request():
     if not form.errors:
         if form.vars.imei_prefix and form.vars.req_count:
             assign_imei(form.vars.id)
+            redirect(URL(f='display'))
 
     return dict(title=T('Request'), form=form)
 
@@ -50,10 +51,37 @@ def display():
                         searchable=False,
                         sortable=False,
                         editable=False,
+                        deletable=True,
+                        details=False,
+                        create=False,
+                        csv=False)
+
+    response.view = 'default/grid.html'
+    return dict(title=T('my requests'), grid=grid)
+
+
+def detail():
+    grid = SQLFORM.grid((db.request.create_by == auth.user_id) & (db.request.id == db.imei_assign.request),
+                        fields=[
+                            db.request.id,
+                            db.request.description,
+                            db.request.imei_prefix,
+                            db.request.req_count,
+                            db.imei_assign.id,
+                        ],
+                        links=[
+                            dict(header='assign section', body=lambda row: get_scope_of_request(row.imei_assign.id))
+                        ],
+                        orderby=~db.request.create_on,
+                        maxtextlength=32,
+                        paginate=100,
+                        searchable=False,
+                        sortable=False,
+                        editable=False,
                         deletable=False,
                         details=False,
                         create=False,
                         csv=False)
 
     response.view = 'default/grid.html'
-    return dict(title=T('requests'), grid=grid)
+    return dict(title=T('my requests result'), grid=grid)

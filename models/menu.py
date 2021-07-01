@@ -7,7 +7,13 @@
 
 response.menu = [
     [T('Request'), False, URL('task', 'request')],
-    [T('History'), False, URL('task', 'display')]
+    [
+        T('History'), False, None,
+        [
+            [T('my request'), False, URL('task', 'display')],
+            [T('request detail'), False, URL('task', 'detail')],
+        ]
+    ]
 ]
 
 if auth.has_membership('administrators'):
