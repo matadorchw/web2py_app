@@ -75,59 +75,65 @@ def get_imei_assign(imei_prefix):
 
 
 def get_free_list(r_total, r_used, req_count):
-    free_list = []
+    assign_list = []
+    count = 0
     for b1, e1 in r_total:
-        free = list(range(b1, e1 + 1))
+        used_list = []
         for b2, e2 in r_used:
             if b2 > e1:
                 break
             if e2 < b1:
                 continue
-            for v in range(b1, e1 + 1):
-                if b2 <= v <= e2:
-                    free.remove(v)
-        if free:
-            free_list.append(free)
+            used_list.append((b2, e2))
 
-        free_count = 0
-        for free in free_list:
-            free_count += len(free)
+        # free in this section
+        free_list = []
 
-        if free_count >= req_count:
-            break
+        if not used_list:
+            free_list.append((b1, e1))
+        else:
+            for i in range(len(used_list)):
+                b, e = used_list[i]
+                if i == 0:
+                    # head
+                    if b > b1:
+                        free_list.append((b1, b - 1))
+                elif i > 0:
+                    # body
+                    b_pre, e_pre = used_list[i - 1]
+                    if b > e_pre + 1:
+                        free_list.append((e_pre + 1, b - 1))
 
-    assign = []
-    done = False
-    for free in free_list:
-        for v in free:
-            if len(assign) < req_count:
-                assign.append(v)
+                if i == len(used_list) - 1:
+                    if e < e1:
+                        # tail
+                        free_list.append((e + 1, e1))
+
+        for b, e in free_list:
+            count_new = count + e - b + 1
+            if count_new < req_count:
+                assign_list.append((b, e))
+                count = count_new
             else:
-                done = True
+                assign_list.append((b, b + req_count - count - 1))
+                count = req_count
                 break
-        if done:
+
+        if count >= req_count:
             break
-    return assign
+
+    if count != req_count:
+        print('{} - {}'.format(count, req_count))
+
+    return assign_list
 
 
 def assign_imei(req_id):
     myset = db(db.request.id == req_id)
     for record in myset.select():
-        print(record.req_count, record.imei_prefix)
         r_total = get_imei_section(record.imei_prefix)
         r_used = get_imei_assign(record.imei_prefix)
 
-        assign = get_free_list(r_total, r_used, record.req_count)
-
-        b = assign[0]
-        e = assign[0]
-        for i in range(1, len(assign)):
-            if assign[i] == e + 1:
-                e += 1
-            else:
-                print(b, e)
-                db.imei_assign.insert(request=req_id, assign_start=b, assign_end=e)
-                b = assign[i]
-                e = assign[i]
-        print(b, e)
-        db.imei_assign.insert(request=req_id, assign_start=b, assign_end=e)
+        assign_list = get_free_list(r_total, r_used, record.req_count)
+        for b, e in assign_list:
+            db.imei_assign.insert(request=req_id, assign_start=b, assign_end=e)
