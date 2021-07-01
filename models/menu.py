@@ -6,12 +6,12 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.menu = [
-    [T('Request'), False, URL('task', 'request')],
+    [T('Request'), False, URL('submit', 'request_submit')],
     [
         T('History'), False, None,
         [
-            [T('my request'), False, URL('task', 'display')],
-            [T('request detail'), False, URL('task', 'detail')],
+            [T('My Requests'), False, URL('display', 'display')],
+            [T('Request Detail'), False, URL('display', 'detail')],
         ]
     ]
 ]
@@ -21,9 +21,9 @@ if auth.has_membership('administrators'):
         [
             T('Manage'), False, None,
             [
-                [T('user'), False, URL('manage', 'user')],
-                [T('group'), False, URL('manage', 'group')],
-                [T('membership'), False, URL('manage', 'membership')],
+                [T('User'), False, URL('manage', 'user')],
+                [T('Group'), False, URL('manage', 'group')],
+                [T('Membership'), False, URL('manage', 'membership')],
             ]
         ]
     )
@@ -32,8 +32,8 @@ if auth.has_membership('administrators'):
         [
             T('Resource'), False, None,
             [
-                [T('imei_prefix'), False, URL('manage', 'imei_prefix')],
-                [T('imei_section'), False, URL('manage', 'imei_section')],
+                [T('IMEI Prefix'), False, URL('manage', 'imei_prefix')],
+                [T('IMEI Section'), False, URL('manage', 'imei_section')],
             ]
         ]
     )

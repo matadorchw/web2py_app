@@ -38,12 +38,12 @@ def membership():
 
 @auth.requires_membership('administrators')
 def imei_prefix():
-    return manage_table(T('imei_prefix'), db.imei_prefix)
+    return manage_table(T('IMEI Prefix'), db.imei_prefix)
 
 
 @auth.requires_membership('administrators')
 def imei_section():
-    return manage_table(T('imei_section'), db.imei_section)
+    return manage_table(T('IMEI Section'), db.imei_section)
 
 
 @auth.requires_membership('administrators')

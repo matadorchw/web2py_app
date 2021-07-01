@@ -34,13 +34,15 @@ db.request.imei_prefix.requires = IS_NOT_EMPTY()
 db.request.create_on.writable = False
 db.request.create_by.writable = False
 
+db.request.id.label = 'Request Id'
+
 db.define_table(
     'imei_assign',
     Field('request', db.request, requires=IS_IN_DB(db, db.request.id, '%(description)s')),
     Field('assign_start', 'integer', represent=lambda v, row: "%06d" % v),
     Field('assign_end', 'integer', represent=lambda v, row: "%06d" % v)
 )
-
+db.imei_assign.id.label = 'IMEI Assign Id'
 
 # functions
 
