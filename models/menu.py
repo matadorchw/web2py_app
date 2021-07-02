@@ -6,12 +6,21 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.menu = [
-    [T('Request'), False, URL('submit', 'request_submit')],
+    [
+        T('Request'), False, URL('submit', 'request_submit')
+    ],
     [
         T('History'), False, None,
         [
             [T('My Requests'), False, URL('display', 'display')],
             [T('Request Detail'), False, URL('display', 'detail')],
+        ]
+    ],
+    [
+        T('IMEI Manage'), False, None,
+        [
+            [T('IMEI Prefix'), False, URL('manage', 'imei_prefix')],
+            [T('IMEI Section'), False, URL('manage', 'imei_section')],
         ]
     ]
 ]
@@ -19,7 +28,17 @@ response.menu = [
 if auth.has_membership('administrators'):
     response.menu.append(
         [
-            T('Manage'), False, None,
+            T('View'), False, None,
+            [
+                [T('Requests'), False, URL('manage', 'requests')],
+                [T('IMEI Assign'), False, URL('manage', 'imei_assign')],
+            ]
+        ]
+    )
+
+    response.menu.append(
+        [
+            T('User Manage'), False, None,
             [
                 [T('User'), False, URL('manage', 'user')],
                 [T('Group'), False, URL('manage', 'group')],
@@ -27,27 +46,6 @@ if auth.has_membership('administrators'):
             ]
         ]
     )
-
-    response.menu.append(
-        [
-            T('Resource'), False, None,
-            [
-                [T('IMEI Prefix'), False, URL('manage', 'imei_prefix')],
-                [T('IMEI Section'), False, URL('manage', 'imei_section')],
-            ]
-        ]
-    )
-
-    response.menu.append(
-        [
-            T('View'), False, None,
-            [
-                [T('requests'), False, URL('manage', 'requests')],
-                [T('imei_assign'), False, URL('manage', 'imei_assign')],
-            ]
-        ]
-    )
-
 # ----------------------------------------------------------------------------------------------------------------------
 # provide shortcuts for development. you can remove everything below in production
 # ----------------------------------------------------------------------------------------------------------------------

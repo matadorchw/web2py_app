@@ -23,17 +23,17 @@ def manage_table(title, table, fields=None,
 
 @auth.requires_membership('administrators')
 def user():
-    return manage_table(T('user'), db.auth_user)
+    return manage_table(T('User'), db.auth_user)
 
 
 @auth.requires_membership('administrators')
 def group():
-    return manage_table(T('group'), db.auth_group)
+    return manage_table(T('Group'), db.auth_group)
 
 
 @auth.requires_membership('administrators')
 def membership():
-    return manage_table(T('membership'), db.auth_membership)
+    return manage_table(T('Membership'), db.auth_membership)
 
 
 @auth.requires_membership('administrators')
@@ -48,11 +48,11 @@ def imei_section():
 
 @auth.requires_membership('administrators')
 def imei_assign():
-    return manage_table(T('imei_assign'), db.imei_assign)
+    return manage_table(T('IMEI Assign'), db.imei_assign)
 
 
 @auth.requires_membership('administrators')
 def requests():
     grid = SQLFORM.smartgrid(db.request, maxtextlength=32, csv=False)
     response.view = 'default/grid.html'
-    return dict(title=T('requests'), grid=grid)
+    return dict(title=T('Requests'), grid=grid)

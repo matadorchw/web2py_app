@@ -4,45 +4,53 @@ db.auth_user._format = "%(first_name)s"
 
 db.define_table(
     'imei_prefix',
-    Field('name', unique=True),
-    Field('imei_prefix'),
+    Field('name', unique=True, label=T('name')),
+    Field('imei_prefix', label=T('IMEI Prefix')),
     format='[%(imei_prefix)s] %(name)s'
 )
+db.imei_prefix.id.label = T('IMEI Prefix Id')
 
 db.define_table(
     'imei_section',
-    Field('name', unique=True),
+    Field('name', unique=True, label=T('name')),
     Field('imei_prefix', db.imei_prefix,
-          requires=IS_IN_DB(db, db.imei_prefix.id, '[%(imei_prefix)s] %(name)s')),
-    Field('section_start', 'integer', default=0, represent=lambda v, row: "%06d" % v),
-    Field('section_end', 'integer', default=999999, represent=lambda v, row: "%06d" % v),
+          requires=IS_IN_DB(db, db.imei_prefix.id, '[%(imei_prefix)s] %(name)s'),
+          label=T('IMEI Prefix')),
+    Field('section_start', 'integer', default=0,
+          label=T('Section Start'),
+          represent=lambda v, row: "%06d" % v),
+    Field('section_end', 'integer', default=999999,
+          label=T('Section End'),
+          represent=lambda v, row: "%06d" % v),
     format='%(name)s [%(imei_prefix)s]'
 )
+db.imei_section.id.label = T('IMEI Section Id')
 
 db.define_table(
     'request',
-    Field('description', unique=True, label=T('description')),
-    Field('req_count', 'integer'),
+    Field('description', unique=True, label=T('Description')),
+    Field('req_count', 'integer', label=T('Request Count')),
     Field('imei_prefix', db.imei_prefix,
-          requires=IS_IN_DB(db, db.imei_prefix.id, '[%(imei_prefix)s] %(name)s')),
-    Field('create_on', 'datetime', default=request.now, label=T('create time')),
-    Field('create_by', db.auth_user, default=auth.user_id, label=T('create by'))
+          requires=IS_IN_DB(db, db.imei_prefix.id, '[%(imei_prefix)s] %(name)s'),
+          label=T('IMEI Prefix')),
+    Field('create_on', 'datetime', default=request.now, label=T('Create Time')),
+    Field('create_by', db.auth_user, default=auth.user_id, label=T('Create By'))
 )
 db.request.description.requires = [IS_NOT_EMPTY(), IS_NOT_IN_DB(db, db.request.description)]
 db.request.req_count.requires = IS_NOT_EMPTY()
 db.request.imei_prefix.requires = IS_NOT_EMPTY()
 db.request.create_on.writable = False
 db.request.create_by.writable = False
-
-db.request.id.label = 'Request Id'
+db.request.id.label = T('Request Id')
 
 db.define_table(
     'imei_assign',
-    Field('request', db.request, requires=IS_IN_DB(db, db.request.id, '%(description)s')),
-    Field('assign_start', 'integer', represent=lambda v, row: "%06d" % v),
-    Field('assign_end', 'integer', represent=lambda v, row: "%06d" % v)
+    Field('request', db.request, requires=IS_IN_DB(db, db.request.id, '%(description)s'), label=T('Request')),
+    Field('assign_start', 'integer', represent=lambda v, row: "%06d" % v, label=T('Assign Start')),
+    Field('assign_end', 'integer', represent=lambda v, row: "%06d" % v, label=T('Assign End'))
 )
-db.imei_assign.id.label = 'IMEI Assign Id'
+db.imei_assign.id.label = T('IMEI Assign Id')
+
 
 # functions
 

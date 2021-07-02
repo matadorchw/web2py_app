@@ -9,7 +9,15 @@ def display():
                         ],
                         links=[
                             dict(header='',
-                                 body=lambda row: A(T('detail'),
+                                 body=lambda row: A(T('Detail'),
+                                                    _class="btn btn-secondary",
+                                                    _href=URL(c="display",
+                                                              f="detail",
+                                                              vars=dict(req_id=row.id),
+                                                              user_signature=True))
+                                 ),
+                            dict(header='',
+                                 body=lambda row: A(T('Detail'),
                                                     _class="btn btn-secondary",
                                                     _href=URL(c="display",
                                                               f="detail",
@@ -48,7 +56,8 @@ def detail():
                             db.imei_assign.id,
                         ],
                         links=[
-                            dict(header='assign section', body=lambda row: get_scope_of_request(row.imei_assign.id))
+                            dict(header=T('IMEI Assign Section'),
+                                 body=lambda row: get_scope_of_request(row.imei_assign.id))
                         ],
                         orderby=~db.request.create_on,
                         maxtextlength=32,
