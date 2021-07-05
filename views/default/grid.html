@@ -7,12 +7,3 @@
     <div>{{=grid}}</div>
 </div>
 
-{{if 'refreshtime' in globals():}}
-{{if refreshtime:}}
-<script>
-    window.setTimeout(function () {
-        window.location.reload();
-    }, {{=refreshtime}});
-</script>
-{{pass}}
-{{pass}}

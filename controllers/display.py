@@ -17,10 +17,10 @@ def display():
                                                               user_signature=True))
                                  ),
                             dict(header='',
-                                 body=lambda row: A(T('Detail'),
+                                 body=lambda row: A(T('export as csv file'),
                                                     _class="btn btn-secondary",
                                                     _href=URL(c="display",
-                                                              f="detail",
+                                                              f="export_imei_set_by_req",
                                                               vars=dict(req_id=row.id),
                                                               user_signature=True))
                                  )
@@ -72,3 +72,15 @@ def detail():
 
     response.view = 'default/grid.html'
     return dict(title=title, grid=grid)
+
+
+@auth.requires_login()
+def export_imei_set_by_req():
+    import gluon.contenttype
+    if request.vars.req_id:
+        response.headers['Content-Type'] = gluon.contenttype.contenttype('.csv')
+        req_id = int(request.vars.req_id)
+        response.headers['Content-disposition'] = 'attachment; filename=%d.csv' % req_id
+        return 'qunimade'
+    else:
+        pass
