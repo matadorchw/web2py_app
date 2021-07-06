@@ -1,3 +1,10 @@
+import base64
+from io import BytesIO
+from matplotlib.colors import ListedColormap
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg
+
+
 @auth.requires_login()
 def display():
     grid = SQLFORM.grid(db.request.create_by == auth.user_id,
@@ -43,10 +50,25 @@ def display():
 def detail():
     title = T('All My Requests Detail')
     q = (db.request.create_by == auth.user_id) & (db.request.id == db.imei_assign.request)
+
+    image_data = None
+
     if request.vars.req_id:
         req_id = int(request.vars.req_id)
         q = (db.request.id == req_id) & q
         title = T('Request Detail') + '[%d]' % req_id
+
+        fig = Figure()
+        ax = fig.subplots()
+        data = get_data_by_req(req_id)
+        cmap = ListedColormap(['white', 'wheat', 'skyblue', 'deepskyblue'])
+        ax.imshow(data, origin='upper', cmap=cmap)
+
+        buf = BytesIO()
+        canvas = FigureCanvasAgg(fig)
+        fig.savefig(buf, format="png")
+        image_data = base64.b64encode(buf.getvalue()).decode("ascii")
+
     grid = SQLFORM.grid(q,
                         fields=[
                             db.request.id,
@@ -71,7 +93,7 @@ def detail():
                         csv=False)
 
     response.view = 'default/grid.html'
-    return dict(title=title, grid=grid)
+    return dict(title=title, grid=grid, image_data=image_data)
 
 
 def calc_15th_of_imei(imei14):
@@ -102,7 +124,7 @@ def export_imei_set_by_req():
         writer = csv.writer(s)
         writer.writerow(['Prefix', 'Snr', 'CRC', 'IMEI'])
 
-        myset = db(
+        rows = db(
             (db.request.id == req_id) &
             (db.request.id == db.imei_assign.request) &
             (db.imei_prefix.id == db.request.imei_prefix)
@@ -111,7 +133,7 @@ def export_imei_set_by_req():
             db.imei_assign.assign_start,
             db.imei_assign.assign_end
         )
-        for r in myset:
+        for r in rows:
             for snr in range(r.imei_assign.assign_start, r.imei_assign.assign_end + 1):
                 imei14 = "%08s%06d" % (r.imei_prefix.imei_prefix, snr)
                 d15 = calc_15th_of_imei(imei14)

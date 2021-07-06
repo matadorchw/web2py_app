@@ -164,3 +164,41 @@ def assign_imei(req_id):
         assign_list = get_free_list(r_total, r_used, record.req_count)
         for b, e in assign_list:
             db.imei_assign.insert(request=req_id, assign_start=b, assign_end=e)
+
+
+import numpy as np
+
+
+def get_data_by_req(req_id):
+    data = np.zeros((1000, 1000), dtype=np.int)
+    rows = db(
+        (db.request.id == req_id) &
+        (db.imei_section.imei_prefix == db.request.imei_prefix)
+    ).select(
+        db.imei_section.imei_prefix,
+        db.imei_section.section_start,
+        db.imei_section.section_end
+    )
+
+    imei_prefix = rows.first().imei_prefix
+
+    for r in rows:
+        for snr in range(r.section_start, r.section_end + 1):
+            data[snr // 1000][snr % 1000] = 1
+
+    rows = db(
+        (db.request.imei_prefix == imei_prefix) &
+        (db.imei_assign.request == db.request.id)
+    ).select(
+        db.request.id,
+        db.imei_assign.assign_start,
+        db.imei_assign.assign_end
+    )
+    for r in rows:
+        for snr in range(r.imei_assign.assign_start, r.imei_assign.assign_end + 1):
+            if r.request.id == req_id:
+                data[snr // 1000][snr % 1000] = 3
+            else:
+                data[snr // 1000][snr % 1000] = 2
+
+    return data
