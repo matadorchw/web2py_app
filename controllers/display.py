@@ -74,13 +74,51 @@ def detail():
     return dict(title=title, grid=grid)
 
 
+def calc_15th_of_imei(imei14):
+    sum = 0
+    for i in range(14):
+        n = ord(imei14[i]) - ord('0')
+        if i % 2:
+            sum += (n * 2) // 10 + (n * 2) % 10
+        else:
+            sum += n
+
+    return (sum % 10) and (10 - sum % 10) or 0
+
+
+import gluon.contenttype
+import cStringIO
+import csv
+
+
 @auth.requires_login()
 def export_imei_set_by_req():
-    import gluon.contenttype
     if request.vars.req_id:
         response.headers['Content-Type'] = gluon.contenttype.contenttype('.csv')
         req_id = int(request.vars.req_id)
         response.headers['Content-disposition'] = 'attachment; filename=%d.csv' % req_id
-        return 'qunimade'
-    else:
-        pass
+
+        s = cStringIO.StringIO()
+        writer = csv.writer(s)
+        writer.writerow(['Prefix', 'Snr', 'CRC', 'IMEI'])
+
+        myset = db(
+            (db.request.id == req_id) &
+            (db.request.id == db.imei_assign.request) &
+            (db.imei_prefix.id == db.request.imei_prefix)
+        ).select(
+            db.imei_prefix.imei_prefix,
+            db.imei_assign.assign_start,
+            db.imei_assign.assign_end
+        )
+        for r in myset:
+            for snr in range(r.imei_assign.assign_start, r.imei_assign.assign_end + 1):
+                imei14 = "%08s%06d" % (r.imei_prefix.imei_prefix, snr)
+                d15 = calc_15th_of_imei(imei14)
+                writer.writerow([
+                    "%08s" % r.imei_prefix.imei_prefix,
+                    "%06d" % snr,
+                    d15,
+                    "%s%d" % (imei14, d15)])
+
+        return s.getvalue()
