@@ -3,6 +3,8 @@ from io import BytesIO
 from matplotlib.colors import ListedColormap
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
+from matplotlib.gridspec import GridSpec
+from matplotlib.patches import Rectangle
 
 
 @auth.requires_login()
@@ -59,10 +61,32 @@ def detail():
         title = T('Request Detail') + '[%d]' % req_id
 
         fig = Figure()
-        ax = fig.subplots()
+
+        gs = GridSpec(5, 7, figure=fig)
+
+        ax1 = fig.add_subplot(gs[:, :5])
+        ax2 = fig.add_subplot(gs[:, 5:])
+
+        ax2.set_ylim(0, 100)
+        ax2.set_xlim(0, 100)
+        ax2.yaxis.set_visible(False)
+        ax2.xaxis.set_visible(False)
+        ax2.set_axis_off()
+
+        colors = ['white', 'wheat', 'skyblue', 'deepskyblue']
+        names = ['not available', 'can be use', 'used', 'current used']
+        for i in range(4):
+            ax2.add_patch(
+                Rectangle(xy=(0, 85 - i * 12), width=98,
+                          height=10, facecolor=colors[i], edgecolor='0.7')
+            )
+            ax2.text(5, 85 - i * 12 + 5, names[i], fontsize=12,
+                     horizontalalignment='left',
+                     verticalalignment='center')
+
         data = get_data_by_req(req_id)
-        cmap = ListedColormap(['white', 'wheat', 'skyblue', 'deepskyblue'])
-        ax.imshow(data, origin='upper', cmap=cmap)
+        cmap = ListedColormap(colors)
+        ax1.imshow(data, origin='upper', cmap=cmap)
 
         buf = BytesIO()
         canvas = FigureCanvasAgg(fig)
