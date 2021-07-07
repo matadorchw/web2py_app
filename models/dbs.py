@@ -170,11 +170,8 @@ import numpy as np
 
 
 def get_data_by_req(req_id):
-    data = np.zeros((1000, 1000), dtype=np.int)
-    rows = db(
-        (db.request.id == req_id) &
-        (db.imei_section.imei_prefix == db.request.imei_prefix)
-    ).select(
+    q = (db.request.id == req_id) & (db.imei_section.imei_prefix == db.request.imei_prefix)
+    rows = db(q).select(
         db.imei_section.imei_prefix,
         db.imei_section.section_start,
         db.imei_section.section_end
@@ -182,7 +179,18 @@ def get_data_by_req(req_id):
 
     imei_prefix = rows.first().imei_prefix
 
+    min_start = db.imei_section.section_start.min()
+    max_end = db.imei_section.section_end.max()
+
+    start = db(q).select(min_start).first()[min_start]
+    start = 1000 * (start // 1000)
+    end = db(q).select(max_end).first()[max_end]
+    end = (end % 1000) and (1000 * (start // 1000)) or (1000 * (1 + start // 1000))
+    print(start, end)
+
+    data = np.zeros((1000, 1000), dtype=np.int)
     for r in rows:
+        print(r)
         for snr in range(r.section_start, r.section_end + 1):
             data[snr // 1000][snr % 1000] = 1
 
@@ -200,5 +208,5 @@ def get_data_by_req(req_id):
                 data[snr // 1000][snr % 1000] = 3
             else:
                 data[snr // 1000][snr % 1000] = 2
-
+    print(data)
     return data

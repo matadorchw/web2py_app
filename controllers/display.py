@@ -60,11 +60,17 @@ def detail():
         q = (db.request.id == req_id) & q
         title = T('Request Detail') + '[%d]' % req_id
 
-        fig = Figure()
+        fig = Figure(figsize=(15, 11))
 
         gs = GridSpec(5, 7, figure=fig)
 
         ax1 = fig.add_subplot(gs[:, :5])
+        ax1.set_xlim(-50, 1050)
+        ax1.set_ylim(-50, 1050)
+        # ax1.yaxis.set_visible(False)
+        # ax1.xaxis.set_visible(False)
+        # ax1.set_axis_off()
+
         ax2 = fig.add_subplot(gs[:, 5:])
 
         ax2.set_ylim(0, 100)
@@ -73,14 +79,14 @@ def detail():
         ax2.xaxis.set_visible(False)
         ax2.set_axis_off()
 
-        colors = ['white', 'wheat', 'skyblue', 'deepskyblue']
+        colors = ['white', 'wheat', 'skyblue', 'red']
         names = ['not available', 'can be use', 'used', 'current used']
         for i in range(4):
             ax2.add_patch(
-                Rectangle(xy=(0, 85 - i * 12), width=98,
+                Rectangle(xy=(0, 2 + i * 11), width=98,
                           height=10, facecolor=colors[i], edgecolor='0.7')
             )
-            ax2.text(5, 85 - i * 12 + 5, names[i], fontsize=12,
+            ax2.text(5, 2 + i * 11 + 5, names[i], fontsize=12,
                      horizontalalignment='left',
                      verticalalignment='center')
 
@@ -133,7 +139,15 @@ def calc_15th_of_imei(imei14):
 
 
 import gluon.contenttype
-import cStringIO
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    try:
+        from StringIO import StringIO
+    except ImportError:
+        from io import StringIO
+
 import csv
 
 
@@ -144,7 +158,7 @@ def export_imei_set_by_req():
         req_id = int(request.vars.req_id)
         response.headers['Content-disposition'] = 'attachment; filename=%d.csv' % req_id
 
-        s = cStringIO.StringIO()
+        s = StringIO()
         writer = csv.writer(s)
         writer.writerow(['Prefix', 'Snr', 'CRC', 'IMEI'])
 
