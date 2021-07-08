@@ -38,7 +38,16 @@ def membership():
 
 @auth.requires_membership('administrators')
 def imei_prefix():
-    return manage_table(T('IMEI Prefix'), db.imei_prefix)
+    return manage_table(T('IMEI Prefix'), db.imei_prefix, links=[
+        dict(header='',
+             body=lambda row: A(T('Detail'),
+                                _class="btn btn-secondary",
+                                _href=URL(c="display",
+                                          f="imei_prefix_detail",
+                                          vars=dict(imei_prefix=row.id),
+                                          user_signature=True))
+             )
+    ])
 
 
 @auth.requires_membership('administrators')
