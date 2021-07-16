@@ -124,6 +124,7 @@
 'Free Applications': 'Free Applications',
 'Function disabled': 'Function disabled',
 'Graph Model': 'Graph Model',
+'Graphical details': '明细（图形化）',
 'Grid Example': 'Grid Example',
 'group': 'group',
 'Group': '组',

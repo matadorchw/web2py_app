@@ -31,6 +31,14 @@ def display():
                                                               user_signature=True))
                                  ),
                             dict(header='',
+                                 body=lambda row: A(T('Graphical details'),
+                                                    _class="btn btn-secondary",
+                                                    _href=URL(c="display",
+                                                              f="detail",
+                                                              vars=dict(req_id=row.id, image=True),
+                                                              user_signature=True))
+                                 ),
+                            dict(header='',
                                  body=lambda row: A(T('export as csv file'),
                                                     _class="btn btn-secondary",
                                                     _href=URL(c="display",
@@ -168,7 +176,8 @@ def detail():
         req_id = int(request.vars.req_id)
         q = (db.request.id == req_id) & q
         title = T('Request Detail') + '[%d]' % req_id
-        image_data = generate_image(get_data_by_req(req_id))
+        if request.vars.image:
+            image_data = generate_image(get_data_by_req(req_id))
 
     grid = SQLFORM.grid(q,
                         fields=[
