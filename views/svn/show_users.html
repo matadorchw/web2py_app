@@ -1,0 +1,12 @@
+{{extend 'layout.html'}}
+
+
+{{if 'title' in globals():}}
+<h1 align="center">{{=title}}</h1>
+{{pass}}
+
+{{if 'users' in globals():}}
+{{for user in users:}}
+<h1 align="center">{{=user}}</h1>
+{{pass}}
+{{pass}}

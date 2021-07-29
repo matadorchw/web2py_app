@@ -3,10 +3,7 @@ import wmi
 
 class VisualSvnHelper:
     def __init__(self, computer='', user='', password=''):
-        self.ns = wmi.WMI(computer=computer,
-                          user=user,
-                          password=password,
-                          namespace='root/VisualSVN')
+        self.ns = wmi.WMI(namespace='root/VisualSVN')
         self.user = self.ns.get('VisualSVN_User')
         self.group = self.ns.get('VisualSVN_Group')
 
@@ -33,4 +30,5 @@ class VisualSvnHelper:
 
 
 if __name__ == '__main__':
-    pass
+    h = VisualSvnHelper()
+    print(h.get_users())

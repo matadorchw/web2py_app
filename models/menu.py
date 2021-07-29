@@ -6,6 +6,13 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.menu = [
+    [
+        T('SVN User Manage'), False, None,
+        [
+            [T('Show Users'), False, URL('svn', 'show_users')],
+            [T('Create User'), False, URL('svn', 'create_user')],
+        ]
+    ]
 ]
 
 if auth.has_membership('administrators'):
@@ -117,4 +124,3 @@ if not configuration.get('app.production'):
              'http://webchat.freenode.net/?channels=web2py'),
         ]),
     ]
-
