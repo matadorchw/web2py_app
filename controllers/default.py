@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import svnhelper
+
+
 def index():
-    return dict(message='welcome')
+    h = svnhelper.VisualSvnHelper()
+    return dict(message=str(h.get_users()))
 
 
 def user():
