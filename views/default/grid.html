@@ -1,0 +1,15 @@
+{{extend 'layout.html'}}
+
+
+{{if 'title' in globals():}}
+<h1 align="center">{{=title}}</h1>
+{{pass}}
+
+{{if 'grid' in globals():}}
+{{if grid:}}
+<div style="background-color:white; margin: 0 auto 5px auto; box-shadow: 0 0 5px #a1a1a1; border-width: 10px; border-radius:5px;padding: 20px">
+    <div>{{=grid}}</div>
+</div>
+{{pass}}
+{{pass}}
+

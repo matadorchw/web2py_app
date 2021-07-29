@@ -6,9 +6,19 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.menu = [
-    (T('Home'), False, URL('default', 'index'), [])
 ]
 
+if auth.has_membership('administrators'):
+    response.menu.append(
+        [
+            T('User Manage'), False, None,
+            [
+                [T('User'), False, URL('manage', 'user')],
+                [T('Group'), False, URL('manage', 'group')],
+                [T('Membership'), False, URL('manage', 'membership')],
+            ]
+        ]
+    )
 # ----------------------------------------------------------------------------------------------------------------------
 # provide shortcuts for development. you can remove everything below in production
 # ----------------------------------------------------------------------------------------------------------------------
