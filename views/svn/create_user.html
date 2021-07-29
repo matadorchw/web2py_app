@@ -1,0 +1,31 @@
+{{extend 'layout.html'}}
+
+{{if 'title' in globals():}}
+<h1 align="center">{{=title}}</h1>
+{{pass}}
+
+
+<div class="col-lg-4"
+     style="background-color:white; margin: 0 auto 5px auto; box-shadow: 0 0 5px #a1a1a1; border-width: 10px; border-radius:5px;padding: 20px">
+    <div>
+        <form enctype="multipart/form-data" action="{{=URL(c='svn', f='create_user_done')}}" method="post">
+            <div class="form-group row">
+                <label class="form-control-label col-sm-3">{{=T('Name')}}</label>
+                <div class="col-sm-9">
+                    <input name="name"/>
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="form-control-label col-sm-3">{{=T('Password')}}</label>
+                <div class="col-sm-9">
+                    <input name="password"/>
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-3"><input type="submit"/></div>
+            </div>
+        </form>
+    </div>
+</div>
