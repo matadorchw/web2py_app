@@ -13,6 +13,12 @@ class VisualSvnHelper:
     def create_user(self, name, password):
         self.user.Create(name, password)
 
+    def set_password(self, name, password):
+        for user in self.ns.instances('VisualSVN_User'):
+            if user.Name == name:
+                user.SetPassword(password)
+                break
+
     def delete_user(self, name):
         self.user.Delete(name)
 
@@ -31,4 +37,4 @@ class VisualSvnHelper:
 
 if __name__ == '__main__':
     h = VisualSvnHelper()
-    print(h.get_users())
+    h.set_password('yangchw', '123')

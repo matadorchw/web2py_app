@@ -6,7 +6,42 @@
 {{pass}}
 <hr>
 {{if 'users' in globals():}}
-{{for user in users:}}
-<p align="center">{{=user}}</p>
-{{pass}}
+<div class="container-fluid main-container">
+    <div class="web2py_grid ">
+        <div class="web2py_console  ">
+            <div class="web2py_counter">{{=len(users)}}{{=T('Users')}}</div>
+        </div>
+        <div class="web2py_table">
+            <div class="web2py_htmltable" style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
+                <table>
+                    <thead>
+                    <tr class="">
+                        <th class="">{{=T('Name')}}</th>
+                        <th class=""></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{for user in users:}}
+                    <tr class="w2p_odd odd with_id" id="{{=user}}">
+                        <td>{{=user}}</td>
+                        <td class="row_buttons" nowrap="nowrap">
+                            <a class="button btn btn-default btn-secondary"
+                               href="{{=URL(c='svn', f='set_password', args=user, user_signature=True)}}">
+                                {{=T('Set Password')}}
+                            </a>
+                            <a class="button btn btn-default btn-secondary" data-w2p_confirm="default"
+                               data-w2p_disable_with="default"
+                               data-w2p_method="POST" data-w2p_remove="tr"
+                               href="{{=URL(c='svn', f='delete_user', args=user, user_signature=True)}}">
+                                {{=T('Delete')}}
+                            </a>
+                        </td>
+                    </tr>
+                    {{pass}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {{pass}}

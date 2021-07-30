@@ -235,6 +235,7 @@
 'Save model as...': 'Save model as...',
 'Search': 'Search',
 'Services': 'Services',
+'Set Password': 'Set Password',
 'Show SVN Users': 'Show SVN Users',
 'Show Users': 'Show Users',
 'Sign Up': 'Sign Up',

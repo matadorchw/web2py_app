@@ -8,14 +8,24 @@ def show_users():
 
 
 def create_user():
-    form = FORM(INPUT(_name='name'),
-                INPUT(_name='password'),
-                INPUT(_type='submit'))
+    return dict(title='Create SVN User')
 
-    return dict(title='Create SVN User', form=form)
+
+def set_password():
+    response.view = 'svn/create_user.html'
+    return dict(title='Set Password', user_name=request.args[0])
+
+
+def set_password_done():
+    h.set_password(request.vars['name'], request.vars['password'])
+    redirect(URL(c='svn', f='show_users'))
+
+
+def delete_user():
+    h.delete_user(request.args[0])
+    redirect(URL(c='svn', f='show_users'))
 
 
 def create_user_done():
-    print(request.vars)
     h.create_user(request.vars['name'], request.vars['password'])
     redirect(URL(c='svn', f='show_users'))
