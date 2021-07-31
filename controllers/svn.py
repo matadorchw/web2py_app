@@ -1,10 +1,8 @@
 import svnhelper
 
-h = svnhelper.VisualSvnHelper()
-
 
 def show_users():
-    return dict(title=T('Show SVN Users'), users=h.get_users())
+    return dict(title=T('Show SVN Users'), users=svnhelper.get_users())
 
 
 @auth.requires_login()
@@ -20,17 +18,17 @@ def set_password():
 
 @auth.requires_login()
 def set_password_done():
-    h.set_password(request.vars['name'], request.vars['password'])
+    svnhelper.set_password(request.vars['name'], request.vars['password'])
     redirect(URL(c='svn', f='show_users'))
 
 
 @auth.requires_login()
 def delete_user():
-    h.delete_user(request.args[0])
+    svnhelper.delete_user(request.args[0])
     redirect(URL(c='svn', f='show_users'))
 
 
 @auth.requires_login()
 def create_user_done():
-    h.create_user(request.vars['name'], request.vars['password'])
+    svnhelper.create_user(request.vars['name'], request.vars['password'])
     redirect(URL(c='svn', f='show_users'))
