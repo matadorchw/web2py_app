@@ -262,6 +262,7 @@
 'This email already has an account': 'This email already has an account',
 'Time in Cache (h:m:s)': 'Time in Cache (h:m:s)',
 'Timestamp': '时间戳',
+'Too short': '太短',
 'Traceback': 'Traceback',
 'Twitter': 'Twitter',
 'Two-step Login Authentication Code': 'Two-step Login Authentication Code',

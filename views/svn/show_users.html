@@ -6,10 +6,11 @@
 {{pass}}
 <hr>
 {{if 'users' in globals():}}
-<div class="container-fluid main-container">
-    <div class="web2py_grid ">
+<div class="container-fluid main-container col-lg-4">
+    <div class="web2py_grid">
         <div class="web2py_table">
-            <div class="web2py_htmltable" style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
+            <div class="web2py_htmltable"
+                 style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
                 <table>
                     <thead>
                     <tr class="">
@@ -18,15 +19,20 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {{for user in users:}}
+                    {{for r, user in enumerate(users):}}
+                    {{if r % 2 ==0:}}
                     <tr class="w2p_odd odd with_id" id="{{=user}}">
+                        {{else:}}
+                    <tr class="w2p_even even with_id" id="{{=user}}">
+                        {{pass}}
                         <td>{{=user}}</td>
                         <td class="row_buttons" nowrap="nowrap">
                             <a class="button btn btn-default btn-secondary"
                                href="{{=URL(c='svn', f='set_password', args=user, user_signature=True)}}">
                                 {{=T('Set Password')}}
                             </a>
-                            <a class="button btn btn-default btn-secondary" data-w2p_confirm="default"
+                            <a class="button btn btn-default btn-secondary"
+                               data-w2p_confirm="default"
                                data-w2p_disable_with="default"
                                data-w2p_method="POST" data-w2p_remove="tr"
                                href="{{=URL(c='svn', f='delete_user', args=user, user_signature=True)}}">
