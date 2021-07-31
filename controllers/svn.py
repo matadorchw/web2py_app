@@ -1,6 +1,7 @@
 import svnhelper
 
 
+@auth.requires_login()
 def show_users():
     return dict(title=T('Show SVN Users'), users=svnhelper.get_users())
 
