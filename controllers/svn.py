@@ -19,17 +19,17 @@ def set_password():
 
 @auth.requires_login()
 def set_password_done():
-    svnhelper.set_password(request.vars['name'], request.vars['password'])
+    svnhelper.user_set_password(request.vars['name'], request.vars['password'])
     redirect(URL(c='svn', f='show_users'))
 
 
 @auth.requires_login()
 def delete_user():
-    svnhelper.delete_user(request.args[0])
+    svnhelper.user_delete(request.args[0])
     redirect(URL(c='svn', f='show_users'))
 
 
 @auth.requires_login()
 def create_user_done():
-    svnhelper.create_user(request.vars['name'], request.vars['password'])
+    svnhelper.user_create(request.vars['name'], request.vars['password'])
     redirect(URL(c='svn', f='show_users'))
