@@ -1,4 +1,6 @@
 import svnhelper
+import wmi
+import binascii
 
 
 @auth.requires_login()
@@ -79,6 +81,11 @@ def delete_group_member():
 @auth.requires_login()
 def add_group_member():
     group = request.args[0]
+
+    if len(request.args) > 1:
+        err_msg = request.args[1]
+        response.flash = binascii.a2b_hex(err_msg).decode('utf-8')
+
     users = svnhelper.get_users()
     groups = svnhelper.get_groups()
     members = svnhelper.group_get_members(group)
@@ -92,6 +99,13 @@ def add_group_member_done():
     group, member = request.args
     members = svnhelper.group_get_members(group)
     members.append(member)
-    print(members)
-    svnhelper.group_set_members(group, members)
-    redirect(URL(c='svn', f='group_members', args=group, user_signature=True))
+    err_msg = None
+    try:
+        svnhelper.group_set_members(group, members)
+    except wmi.x_wmi as e:
+        err_msg = e.com_error.args[2][2]
+        err_msg = binascii.b2a_hex(err_msg.encode('utf-8')).decode()
+    if err_msg:
+        redirect(URL(c='svn', f='add_group_member', args=[group, err_msg], user_signature=True))
+    else:
+        redirect(URL(c='svn', f='group_members', args=group, user_signature=True))
