@@ -15,6 +15,12 @@ def create_user():
 
 
 @auth.requires_login()
+def create_user_done():
+    svnhelper.user_create(request.vars['name'], request.vars['password'])
+    redirect(URL(c='svn', f='show_users'))
+
+
+@auth.requires_login()
 def set_password():
     response.view = 'svn/create_user.html'
     action = URL(c='svn', f='set_password_done')
@@ -30,12 +36,6 @@ def set_password_done():
 @auth.requires_login()
 def delete_user():
     svnhelper.user_delete(request.args[0])
-    redirect(URL(c='svn', f='show_users'))
-
-
-@auth.requires_login()
-def create_user_done():
-    svnhelper.user_create(request.vars['name'], request.vars['password'])
     redirect(URL(c='svn', f='show_users'))
 
 
@@ -99,13 +99,12 @@ def add_group_member_done():
     group, member = request.args
     members = svnhelper.group_get_members(group)
     members.append(member)
-    err_msg = None
+    args = [group]
     try:
         svnhelper.group_set_members(group, members)
     except wmi.x_wmi as e:
         err_msg = e.com_error.args[2][2]
         err_msg = binascii.b2a_hex(err_msg.encode('utf-8')).decode()
-    if err_msg:
-        redirect(URL(c='svn', f='add_group_member', args=[group, err_msg], user_signature=True))
-    else:
-        redirect(URL(c='svn', f='group_members', args=group, user_signature=True))
+        args.append(err_msg)
+
+    redirect(URL(c='svn', f='add_group_member', args=args, user_signature=True))

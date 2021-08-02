@@ -7,17 +7,10 @@
 
 response.menu = [
     [
-        T('SVN User Manage'), False, None,
+        T('SVN Manage'), False, None,
         [
-            [T('Show Users'), False, URL('svn', 'show_users')],
-            [T('Create User'), False, URL('svn', 'create_user')],
-        ]
-    ],
-    [
-        T('SVN Group Manage'), False, None,
-        [
-            [T('Show Group'), False, URL('svn', 'show_groups')],
-            [T('Create Group'), False, URL('svn', 'create_group')],
+            [T('User'), False, URL('svn', 'show_users')],
+            [T('Group'), False, URL('svn', 'show_groups')],
         ]
     ]
 ]

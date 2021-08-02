@@ -22,6 +22,7 @@ def get_users():
     pythoncom.CoInitialize()
     result = [user.Name for user in __get_users()]
     pythoncom.CoUninitialize()
+    result.sort()
     return result
 
 
@@ -58,6 +59,7 @@ def get_groups():
     pythoncom.CoInitialize()
     result = [group.Name for group in __get_groups()]
     pythoncom.CoUninitialize()
+    result.sort()
     return result
 
 
@@ -81,6 +83,7 @@ def group_get_members(name):
             result = [m.Name for m in group.GetMembers()[0]]
             break
     pythoncom.CoUninitialize()
+    result.sort()
     return result
 
 
@@ -114,6 +117,7 @@ def get_repositories():
     pythoncom.CoInitialize()
     result = [(repo.Name, repo.URL) for repo in __get_repositories()]
     pythoncom.CoUninitialize()
+    result.sort()
     return result
 
 

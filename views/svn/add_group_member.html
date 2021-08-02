@@ -4,86 +4,95 @@
 <h1 align="center">{{=title}}</h1>
 {{pass}}
 
-{{if 'users' in globals():}}
-<div class="container-fluid main-container col-lg-4">
-    <div class="web2py_grid">
-        <div class="web2py_table">
-            <div class="web2py_htmltable"
-                 style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
-                <table>
-                    <thead>
-                    <tr class="">
-                        <th class="" width="50%">{{=T('User')}}</th>
-                        <th class=""></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{for r, user in enumerate(users):}}
-                    {{if r % 2 ==0:}}
-                    <tr class="w2p_odd odd with_id" id="{{=user}}">
-                        {{else:}}
-                    <tr class="w2p_even even with_id" id="{{=user}}">
-                        {{pass}}
-                        <td>{{=user}}</td>
-                        <td class="row_buttons" nowrap="nowrap">
-                            {{if user not in members:}}
-                            <a class="button btn btn-default btn-secondary"
-                               href="{{=URL(c='svn', f='add_group_member_done', args=[group_name,user], user_signature=True)}}">
-                                {{=T('Add')}}
-                            </a>
-                            {{else:}}
-                            {{=T('Joined')}}
-                            {{pass}}
-                        </td>
-                    </tr>
-                    {{pass}}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-{{pass}}
 
-{{if 'groups' in globals():}}
-<div class="container-fluid main-container col-lg-4">
-    <div class="web2py_grid">
-        <div class="web2py_table">
-            <div class="web2py_htmltable"
-                 style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
-                <table>
-                    <thead>
-                    <tr class="">
-                        <th class="" width="50%">{{=T('Group')}}</th>
-                        <th class=""></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{for r, group in enumerate(groups):}}
-                    {{if r % 2 ==0:}}
-                    <tr class="w2p_odd odd with_id" id="{{=group}}">
-                        {{else:}}
-                    <tr class="w2p_even even with_id" id="{{=group}}">
-                        {{pass}}
-                        <td>{{=group}}</td>
-                        <td class="row_buttons" nowrap="nowrap">
-                            {{if group==group_name:}}
-                            {{=T('ItSelf')}}
-                            {{elif group not in members:}}
-                            <a class="button btn btn-default btn-secondary"
-                               href="{{=URL(c='svn', f='add_group_member_done', args=[group_name,group], user_signature=True)}}">
-                                {{=T('Add')}}
-                            </a>
+<div class="col-lg-4"
+     style="background-color:white; margin: 0 auto 5px auto; box-shadow: 0 0 5px #a1a1a1; border-width: 10px; border-radius:5px;padding: 20px">
+    <div class="container-fluid main-container">
+        {{if 'users' in globals():}}
+        <div class="web2py_grid">
+            <div class="web2py_console">
+                <a class="button btn btn-default btn-secondary"
+                   style="float: right;"
+                   href="{{=URL(c='svn', f='group_members', args=group_name, user_signature=True)}}">
+                    <span class="buttontext button" title="{{=T('Return')}}">{{=T('Return')}}</span></a>
+                </a>
+            </div>
+            <div class="web2py_table">
+                <div class="web2py_htmltable"
+                     style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
+                    <table>
+                        <thead>
+                        <tr class="">
+                            <th class="" width="80%">{{=T('User')}}</th>
+                            <th class=""></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{for r, user in enumerate(users):}}
+                        {{if r % 2 ==0:}}
+                        <tr class="w2p_odd odd with_id" id="{{=user}}">
                             {{else:}}
-                            {{=T('Joined')}}
+                        <tr class="w2p_even even with_id" id="{{=user}}">
                             {{pass}}
-                        </td>
-                    </tr>
-                    {{pass}}
-                    </tbody>
-                </table>
+                            <td>{{=user}}</td>
+                            <td class="row_buttons" nowrap="nowrap">
+                                {{if user not in members:}}
+                                <a class="button btn btn-default btn-secondary"
+                                   href="{{=URL(c='svn', f='add_group_member_done', args=[group_name,user], user_signature=True)}}">
+                                    {{=T('Add')}}
+                                </a>
+                                {{else:}}
+                                {{=T('Joined')}}
+                                {{pass}}
+                            </td>
+                        </tr>
+                        {{pass}}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        {{pass}}
+
+        {{if 'groups' in globals():}}
+        <div class="web2py_grid">
+            <div class="web2py_table">
+                <div class="web2py_htmltable"
+                     style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
+                    <table>
+                        <thead>
+                        <tr class="">
+                            <th class="" width="80%">{{=T('Group')}}</th>
+                            <th class=""></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{for r, group in enumerate(groups):}}
+                        {{if r % 2 ==0:}}
+                        <tr class="w2p_odd odd with_id" id="{{=group}}">
+                            {{else:}}
+                        <tr class="w2p_even even with_id" id="{{=group}}">
+                            {{pass}}
+                            <td>{{=group}}</td>
+                            <td class="row_buttons" nowrap="nowrap">
+                                {{if group==group_name:}}
+                                {{=T('ItSelf')}}
+                                {{elif group not in members:}}
+                                <a class="button btn btn-default btn-secondary"
+                                   href="{{=URL(c='svn', f='add_group_member_done', args=[group_name,group], user_signature=True)}}">
+                                    {{=T('Add')}}
+                                </a>
+                                {{else:}}
+                                {{=T('Joined')}}
+                                {{pass}}
+                            </td>
+                        </tr>
+                        {{pass}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {{pass}}
     </div>
 </div>
-{{pass}}

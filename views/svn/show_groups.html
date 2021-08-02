@@ -4,45 +4,56 @@
 {{if 'title' in globals():}}
 <h1 align="center">{{=title}}</h1>
 {{pass}}
-<hr>
+
 {{if 'groups' in globals():}}
-<div class="container-fluid main-container col-lg-4">
-    <div class="web2py_grid">
-        <div class="web2py_table">
-            <div class="web2py_htmltable"
-                 style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
-                <table>
-                    <thead>
-                    <tr class="">
-                        <th class="" width="50%">{{=T('Name')}}</th>
-                        <th class=""></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{for r, group in enumerate(groups):}}
-                    {{if r % 2 ==0:}}
-                    <tr class="w2p_odd odd with_id" id="{{=group}}">
-                        {{else:}}
-                    <tr class="w2p_even even with_id" id="{{=group}}">
+<div class="col-lg-4"
+     style="background-color:white; margin: 0 auto 5px auto; box-shadow: 0 0 5px #a1a1a1; border-width: 10px; border-radius:5px;padding: 20px">
+    <div class="container-fluid main-container">
+        <div class="web2py_grid">
+            <div class="web2py_console">
+                <a class="button btn btn-default btn-secondary"
+                   href="{{=URL(c='svn', f='create_group', user_signature=True)}}">
+                    <span class="icon plus icon-plus glyphicon glyphicon-plus"></span>
+                    <span class="buttontext button"
+                          title="{{=T('Create Group')}}">{{=T('Add')}}</span></a>
+                </a>
+            </div>
+            <div class="web2py_table">
+                <div class="web2py_htmltable"
+                     style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
+                    <table>
+                        <thead>
+                        <tr class="">
+                            <th class="" width="60%">{{=T('Name')}}</th>
+                            <th class=""></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{for r, group in enumerate(groups):}}
+                        {{if r % 2 ==0:}}
+                        <tr class="w2p_odd odd with_id" id="{{=group}}">
+                            {{else:}}
+                        <tr class="w2p_even even with_id" id="{{=group}}">
+                            {{pass}}
+                            <td>{{=group}}</td>
+                            <td class="row_buttons" nowrap="nowrap">
+                                <a class="button btn btn-default btn-secondary"
+                                   href="{{=URL(c='svn', f='group_members', args=group, user_signature=True)}}">
+                                    {{=T('Member Manage')}}
+                                </a>
+                                <a class="button btn btn-default btn-secondary"
+                                   data-w2p_confirm="default"
+                                   data-w2p_disable_with="default"
+                                   data-w2p_method="POST" data-w2p_remove="tr"
+                                   href="{{=URL(c='svn', f='delete_group', args=group, user_signature=True)}}">
+                                    {{=T('Delete')}}
+                                </a>
+                            </td>
+                        </tr>
                         {{pass}}
-                        <td>{{=group}}</td>
-                        <td class="row_buttons" nowrap="nowrap">
-                            <a class="button btn btn-default btn-secondary"
-                               href="{{=URL(c='svn', f='group_members', args=group, user_signature=True)}}">
-                                {{=T('Member Manage')}}
-                            </a>
-                            <a class="button btn btn-default btn-secondary"
-                               data-w2p_confirm="default"
-                               data-w2p_disable_with="default"
-                               data-w2p_method="POST" data-w2p_remove="tr"
-                               href="{{=URL(c='svn', f='delete_group', args=group, user_signature=True)}}">
-                                {{=T('Delete')}}
-                            </a>
-                        </td>
-                    </tr>
-                    {{pass}}
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
