@@ -78,8 +78,20 @@ def delete_group_member():
 
 @auth.requires_login()
 def add_group_member():
+    group = request.args[0]
+    users = svnhelper.get_users()
+    groups = svnhelper.get_groups()
+    members = svnhelper.group_get_members(group)
+    return dict(title=T('Add Group Member') + f'[{group}]',
+                group_name=group, users=users, groups=groups,
+                members=members)
+
+
+@auth.requires_login()
+def add_group_member_done():
     group, member = request.args
     members = svnhelper.group_get_members(group)
     members.append(member)
+    print(members)
     svnhelper.group_set_members(group, members)
     redirect(URL(c='svn', f='group_members', args=group, user_signature=True))

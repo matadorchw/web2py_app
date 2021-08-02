@@ -86,14 +86,18 @@ def group_get_members(name):
 
 def group_set_members(name, members):
     pythoncom.CoInitialize()
-    users = []
+    new_members = []
     for user in __get_users():
         if user.Name in members:
-            users.append(user.path())
+            new_members.append(user.path())
+
+    for group in __get_groups():
+        if group.Name in members:
+            new_members.append(group.path())
 
     for group in __get_groups():
         if group.Name == name:
-            group.SetMembers(Members=users)
+            group.SetMembers(Members=new_members)
             break
     pythoncom.CoUninitialize()
 
