@@ -76,15 +76,32 @@ def group_delete(name):
 
 
 def group_get_members(name):
-    result = []
     pythoncom.CoInitialize()
+    members = []
     for group in __get_groups():
         if group.Name == name:
-            result = [m.Name for m in group.GetMembers()[0]]
+            members = [m.Name for m in group.GetMembers()[0]]
             break
     pythoncom.CoUninitialize()
-    result.sort()
-    return result
+    return members
+
+
+def group_get_members_by_type(name):
+    pythoncom.CoInitialize()
+    members = group_get_members(name)
+
+    users = []
+    for user in get_users():
+        if user in members:
+            users.append(user)
+
+    groups = []
+    for group in get_groups():
+        if group in members:
+            groups.append(group)
+
+    pythoncom.CoUninitialize()
+    return users, groups
 
 
 def group_set_members(name, members):
@@ -122,4 +139,5 @@ def get_repositories():
 
 
 if __name__ == '__main__':
-    print(get_repositories())
+    print(group_get_members('g1'))
+    print(group_get_members_by_type('g1'))

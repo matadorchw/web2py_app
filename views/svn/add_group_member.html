@@ -4,22 +4,20 @@
 <h1 align="center">{{=title}}</h1>
 {{pass}}
 
-
 <div class="col-lg-4"
      style="background-color:white; margin: 0 auto 5px auto; box-shadow: 0 0 5px #a1a1a1; border-width: 10px; border-radius:5px;padding: 20px">
     <div class="container-fluid main-container">
-        {{if 'users' in globals():}}
         <div class="web2py_grid">
             <div class="web2py_console">
                 <a class="button btn btn-default btn-secondary"
-                   style="float: right;"
                    href="{{=URL(c='svn', f='group_members', args=group_name, user_signature=True)}}">
-                    <span class="buttontext button" title="{{=T('Return')}}">{{=T('Return')}}</span></a>
+                    <span class="buttontext button" title="{{=T('Return')}}">{{=T('Return')}}</span>
                 </a>
             </div>
+            <hr>
+            {{if 'users' in globals():}}
             <div class="web2py_table">
-                <div class="web2py_htmltable"
-                     style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
+                <div class="web2py_htmltable" style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
                     <table>
                         <thead>
                         <tr class="">
@@ -51,14 +49,11 @@
                     </table>
                 </div>
             </div>
-        </div>
-        {{pass}}
-
-        {{if 'groups' in globals():}}
-        <div class="web2py_grid">
+            {{pass}}
+            <hr>
+            {{if 'groups' in globals():}}
             <div class="web2py_table">
-                <div class="web2py_htmltable"
-                     style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
+                <div class="web2py_htmltable" style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
                     <table>
                         <thead>
                         <tr class="">
@@ -92,7 +87,7 @@
                     </table>
                 </div>
             </div>
+            {{pass}}
         </div>
-        {{pass}}
     </div>
 </div>

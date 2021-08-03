@@ -5,7 +5,6 @@
 <h1 align="center">{{=title}}</h1>
 {{pass}}
 
-{{if 'members' in globals():}}
 <div class="col-lg-4"
      style="background-color:white; margin: 0 auto 5px auto; box-shadow: 0 0 5px #a1a1a1; border-width: 10px; border-radius:5px;padding: 20px">
     <div class="container-fluid main-container">
@@ -14,27 +13,27 @@
                 <a class="button btn btn-default btn-secondary"
                    href="{{=URL(c='svn', f='add_group_member', args=group_name, user_signature=True)}}">
                     <span class="icon plus icon-plus glyphicon glyphicon-plus"></span>
-                    <span class="buttontext button"
-                          title="{{=T('Add Member')}}">{{=T('Add')}}</span></a>
+                    <span class="buttontext button" title="{{=T('Add Member')}}">{{=T('Add')}}</span>
                 </a>
                 <a class="button btn btn-default btn-secondary"
-                   style="float: right;"
                    href="{{=URL(c='svn', f='show_groups', user_signature=True)}}">
-                    <span class="buttontext button" title="{{=T('Return')}}">{{=T('Return')}}</span></a>
+                    <span class="buttontext button" title="{{=T('Return')}}">{{=T('Return')}}</span>
                 </a>
             </div>
+            <hr>
+            {{if 'users' in globals():}}
             <div class="web2py_table">
                 <div class="web2py_htmltable"
                      style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
                     <table>
                         <thead>
                         <tr class="">
-                            <th class="" width="80%">{{=T('Name')}}</th>
+                            <th class="" width="80%">{{=T('User')}}</th>
                             <th class=""></th>
                         </tr>
                         </thead>
                         <tbody>
-                        {{for r, member in enumerate(members):}}
+                        {{for r, member in enumerate(users):}}
                         {{if r % 2 ==0:}}
                         <tr class="w2p_odd odd with_id" id="{{=member}}">
                             {{else:}}
@@ -56,7 +55,43 @@
                     </table>
                 </div>
             </div>
+            {{pass}}
+            <hr>
+            {{if 'groups' in globals():}}
+            <div class="web2py_table">
+                <div class="web2py_htmltable"
+                     style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
+                    <table>
+                        <thead>
+                        <tr class="">
+                            <th class="" width="80%">{{=T('Group')}}</th>
+                            <th class=""></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{for r, member in enumerate(groups):}}
+                        {{if r % 2 ==0:}}
+                        <tr class="w2p_odd odd with_id" id="{{=member}}">
+                            {{else:}}
+                        <tr class="w2p_even even with_id" id="{{=member}}">
+                            {{pass}}
+                            <td>{{=member}}</td>
+                            <td class="row_buttons" nowrap="nowrap">
+                                <a class="button btn btn-default btn-secondary"
+                                   data-w2p_confirm="default"
+                                   data-w2p_disable_with="default"
+                                   data-w2p_method="POST" data-w2p_remove="tr"
+                                   href="{{=URL(c='svn', f='delete_group_member', args=[group_name,member], user_signature=True)}}">
+                                    {{=T('Delete')}}
+                                </a>
+                            </td>
+                        </tr>
+                        {{pass}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {{pass}}
         </div>
     </div>
 </div>
-{{pass}}

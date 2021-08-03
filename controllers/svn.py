@@ -65,8 +65,8 @@ def delete_group():
 @auth.requires_login()
 def group_members():
     group = request.args[0]
-    members = svnhelper.group_get_members(group)
-    return dict(title=T('Group Members') + f'[{group}]', group_name=group, members=members)
+    users, groups = svnhelper.group_get_members_by_type(group)
+    return dict(title=T('Group Members') + f'[{group}]', group_name=group, users=users, groups=groups)
 
 
 @auth.requires_login()
