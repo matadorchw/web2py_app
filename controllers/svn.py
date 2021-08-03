@@ -19,11 +19,16 @@ def create_user():
 @auth.requires_login()
 def create_user_done():
     args = ['done']
-    err_msg = svn_user_create(request.vars['name'], request.vars['password'])
-    if err_msg:
-        args.append(err_msg)
+    name = request.vars['name']
+    password = request.vars['password']
+    if name.strip():
+        err_msg = svn_user_create(name, password)
+        if err_msg:
+            args.append(err_msg)
+        else:
+            args.append('succ')
     else:
-        args.append('succ')
+        args.append(svn_err_msg_encode(T('name is empty').encode()))
     redirect(URL(c='svn', f='create_user', args=args, user_signature=True))
 
 
@@ -74,11 +79,15 @@ def create_group():
 @auth.requires_login()
 def create_group_done():
     args = ['done']
-    err_msg = svn_group_create(request.vars['name'])
-    if err_msg:
-        args.append(err_msg)
+    name = request.vars['name']
+    if name.strip():
+        err_msg = svn_group_create(name)
+        if err_msg:
+            args.append(err_msg)
+        else:
+            args.append('succ')
     else:
-        args.append('succ')
+        args.append(svn_err_msg_encode(T('name is empty').encode()))
     redirect(URL(c='svn', f='create_group', args=args, user_signature=True))
 
 

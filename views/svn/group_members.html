@@ -13,11 +13,13 @@
                 <a class="button btn btn-default btn-secondary"
                    href="{{=URL(c='svn', f='add_group_member', args=group_name, user_signature=True)}}">
                     <span class="icon plus icon-plus glyphicon glyphicon-plus"></span>
-                    <span class="buttontext button" title="{{=T('Add Member')}}">{{=T('Add')}}</span>
+                    <span class="buttontext button"
+                          title="{{=T('Add Member')}}">{{=T('Add')}}</span>
                 </a>
                 <a class="button btn btn-default btn-secondary"
                    href="{{=URL(c='svn', f='show_groups', user_signature=True)}}">
-                    <span class="buttontext button" title="{{=T('Return')}}">{{=T('Return')}}</span>
+                    <span class="icon arrowleft icon-arrow-left glyphicon glyphicon-arrow-left"></span>
+                    <span class="buttontext button" title="{{=T('Back')}}">{{=T('Back')}}</span>
                 </a>
             </div>
             <hr>
