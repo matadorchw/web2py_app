@@ -121,5 +121,4 @@ def get_repositories():
 
 
 if __name__ == '__main__':
-    print(group_get_members('g1'))
-    print(group_get_members_by_type('g1'))
+    pass

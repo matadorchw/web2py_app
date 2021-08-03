@@ -1,23 +1,30 @@
-import svnhelper
-import wmi
-import binascii
-
-
 @auth.requires_login()
 def show_users():
-    return dict(title=T('SVN Users'), users=svnhelper.get_users())
+    return dict(title=T('SVN Users'), users=svn_get_users())
 
 
 @auth.requires_login()
 def create_user():
+    if len(request.args) > 1:
+        err_msg = request.args[1]
+        if err_msg == 'succ':
+            response.flash = T('Created successfully')
+        else:
+            response.flash = svn_err_msg_decode(err_msg)
+
     action = URL(c='svn', f='create_user_done')
     return dict(title=T('Create SVN User'), action=action)
 
 
 @auth.requires_login()
 def create_user_done():
-    svnhelper.user_create(request.vars['name'], request.vars['password'])
-    redirect(URL(c='svn', f='show_users'))
+    args = ['done']
+    err_msg = svn_user_create(request.vars['name'], request.vars['password'])
+    if err_msg:
+        args.append(err_msg)
+    else:
+        args.append('succ')
+    redirect(URL(c='svn', f='create_user', args=args, user_signature=True))
 
 
 @auth.requires_login()
@@ -29,63 +36,69 @@ def set_password():
 
 @auth.requires_login()
 def set_password_done():
-    svnhelper.user_set_password(request.vars['name'], request.vars['password'])
+    svn_user_set_password(request.vars['name'], request.vars['password'])
     redirect(URL(c='svn', f='show_users'))
 
 
 @auth.requires_login()
+def user_detail():
+    user = request.args[0]
+    groups = svn_user_belongs_groups(user)
+    return dict(title=T('SVN Users') + f'{user}' + T('Detail'), user=user, groups=groups)
+
+
+@auth.requires_login()
 def delete_user():
-    svnhelper.user_delete(request.args[0])
+    svn_user_delete(request.args[0])
     redirect(URL(c='svn', f='show_users'))
 
 
 @auth.requires_login()
 def show_groups():
-    return dict(title=T('SVN Groups'), groups=svnhelper.get_groups())
+    return dict(title=T('SVN Groups'), groups=svn_get_groups())
 
 
 @auth.requires_login()
 def create_group():
+    if len(request.args) > 1:
+        err_msg = request.args[1]
+        if err_msg == 'succ':
+            response.flash = T('Created successfully')
+        else:
+            response.flash = svn_err_msg_decode(err_msg)
+
     action = URL(c='svn', f='create_group_done')
     return dict(title=T('Create SVN Group'), action=action)
 
 
 @auth.requires_login()
 def create_group_done():
-    svnhelper.group_create(request.vars['name'])
-    redirect(URL(c='svn', f='show_groups'))
+    args = ['done']
+    err_msg = svn_group_create(request.vars['name'])
+    if err_msg:
+        args.append(err_msg)
+    else:
+        args.append('succ')
+    redirect(URL(c='svn', f='create_group', args=args, user_signature=True))
 
 
 @auth.requires_login()
 def delete_group():
-    svnhelper.group_delete(request.args[0])
+    svn_group_delete(request.args[0])
     redirect(URL(c='svn', f='show_groups'))
 
 
 @auth.requires_login()
 def group_members():
     group_name = request.args[0]
-    members = svnhelper.group_get_members(group_name)
-
-    users = []
-    for user in svnhelper.get_users():
-        if user in members:
-            users.append(user)
-
-    groups = []
-    for group in svnhelper.get_groups():
-        if group in members:
-            groups.append(group)
-
+    users, groups = svn_group_get_members_by_type(group_name)
     return dict(title=T('Group Members') + f'[{group_name}]', group_name=group_name, users=users, groups=groups)
 
 
 @auth.requires_login()
 def delete_group_member():
     group, member = request.args
-    members = svnhelper.group_get_members(group)
-    members.remove(member)
-    svnhelper.group_set_members(group, members)
+    svn_group_delete_member(group, member)
     redirect(URL(c='svn', f='group_members', args=group, user_signature=True))
 
 
@@ -95,11 +108,12 @@ def add_group_member():
 
     if len(request.args) > 1:
         err_msg = request.args[1]
-        response.flash = binascii.a2b_hex(err_msg).decode('utf-8')
+        response.flash = svn_err_msg_decode(err_msg)
 
-    users = svnhelper.get_users()
-    groups = svnhelper.get_groups()
-    members = svnhelper.group_get_members(group)
+    users = svn_get_users()
+    groups = svn_get_groups()
+    members = svn_group_get_members(group)
+
     return dict(title=T('Add Group Member') + f'[{group}]',
                 group_name=group, users=users, groups=groups,
                 members=members)
@@ -108,14 +122,10 @@ def add_group_member():
 @auth.requires_login()
 def add_group_member_done():
     group, member = request.args
-    members = svnhelper.group_get_members(group)
-    members.append(member)
+
     args = [group]
-    try:
-        svnhelper.group_set_members(group, members)
-    except wmi.x_wmi as e:
-        err_msg = e.com_error.args[2][2]
-        err_msg = binascii.b2a_hex(err_msg.encode('utf-8')).decode()
+    err_msg = svn_group_add_member(group, member)
+    if err_msg:
         args.append(err_msg)
 
     redirect(URL(c='svn', f='add_group_member', args=args, user_signature=True))

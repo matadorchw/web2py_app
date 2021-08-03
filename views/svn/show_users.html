@@ -41,6 +41,10 @@
                                     {{=T('Set Password')}}
                                 </a>
                                 <a class="button btn btn-default btn-secondary"
+                                   href="{{=URL(c='svn', f='user_detail', args=user, user_signature=True)}}">
+                                    {{=T('Detail')}}
+                                </a>
+                                <a class="button btn btn-default btn-secondary"
                                    data-w2p_confirm="default"
                                    data-w2p_disable_with="default"
                                    data-w2p_method="POST" data-w2p_remove="tr"
