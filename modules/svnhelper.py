@@ -86,24 +86,6 @@ def group_get_members(name):
     return members
 
 
-def group_get_members_by_type(name):
-    pythoncom.CoInitialize()
-    members = group_get_members(name)
-
-    users = []
-    for user in get_users():
-        if user in members:
-            users.append(user)
-
-    groups = []
-    for group in get_groups():
-        if group in members:
-            groups.append(group)
-
-    pythoncom.CoUninitialize()
-    return users, groups
-
-
 def group_set_members(name, members):
     pythoncom.CoInitialize()
     new_members = []
