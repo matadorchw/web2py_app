@@ -91,6 +91,8 @@
 'db': 'db',
 'DB Model': '数据库模型',
 'Delete': '删除',
+'Delete from SVN': '从SVN中删除',
+'Delete from this group': '从组中删除',
 'Delete:': '删除:',
 'Demo': 'Demo',
 'Deployment Recipes': 'Deployment Recipes',

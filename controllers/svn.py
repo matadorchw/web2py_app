@@ -77,7 +77,7 @@ def group_members():
         if group in members:
             groups.append(group)
 
-    return dict(title=T('Group Members') + f'[{group}]', group_name=group_name, users=users, groups=groups)
+    return dict(title=T('Group Members') + f'[{group_name}]', group_name=group_name, users=users, groups=groups)
 
 
 @auth.requires_login()

@@ -46,7 +46,14 @@
                                    data-w2p_disable_with="default"
                                    data-w2p_method="POST" data-w2p_remove="tr"
                                    href="{{=URL(c='svn', f='delete_group_member', args=[group_name,member], user_signature=True)}}">
-                                    {{=T('Delete')}}
+                                    {{=T('Delete from this group')}}
+                                </a>
+                                <a class="button btn btn-default btn-secondary"
+                                   data-w2p_confirm="default"
+                                   data-w2p_disable_with="default"
+                                   data-w2p_method="POST" data-w2p_remove="tr"
+                                   href="{{=URL(c='svn', f='delete_user', args=member, user_signature=True)}}">
+                                    {{=T('Delete from SVN')}}
                                 </a>
                             </td>
                         </tr>
@@ -82,7 +89,14 @@
                                    data-w2p_disable_with="default"
                                    data-w2p_method="POST" data-w2p_remove="tr"
                                    href="{{=URL(c='svn', f='delete_group_member', args=[group_name,member], user_signature=True)}}">
-                                    {{=T('Delete')}}
+                                    {{=T('Delete from this group')}}
+                                </a>
+                                <a class="button btn btn-default btn-secondary"
+                                   data-w2p_confirm="default"
+                                   data-w2p_disable_with="default"
+                                   data-w2p_method="POST" data-w2p_remove="tr"
+                                   href="{{=URL(c='svn', f='delete_group', args=member, user_signature=True)}}">
+                                    {{=T('Delete from SVN')}}
                                 </a>
                             </td>
                         </tr>
