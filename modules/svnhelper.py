@@ -120,5 +120,74 @@ def get_repositories():
     return result
 
 
+class VisualSVN_RepositoryEntry:
+    def __init__(self, entry):
+        self.RepositoryName = entry.RepositoryName
+        self.Path = entry.Path
+        self.InheritedOnlyPermissions = entry.InheritedOnlyPermissions
+        self.Name = entry.Name
+        self.ParentPath = entry.ParentPath
+        self.URL = entry.URL
+        self.Kind = entry.Kind
+
+    def __str__(self):
+        return (
+            f'RepositoryName[{self.RepositoryName}] '
+            f'Path[{self.Path}] '
+            f'InheritedOnlyPermissions[{self.InheritedOnlyPermissions}] '
+            f'Name[{self.Name}] '
+            f'ParentPath[{self.ParentPath}] '
+            f'URL[{self.URL}] '
+            f'Kind[{self.Kind}]')
+
+
+def repo_get_security(repo_name, path):
+    permissions = []
+    for r in __get_repositories():
+        if r.Name == repo_name:
+            for p in r.GetSecurity(path)[0]:
+                permissions.append((p.Account.Name, p.AccessLevel))
+            break
+    return permissions
+
+
+def repo_set_security(repo_name, path, permissions, reset_children=False):
+    Permissions = []
+    for account, access_level in permissions:
+        Account = None
+        if Account is None:
+            for user in __get_users():
+                if user.Name == account:
+                    Account = user
+                    break
+        if Account is None:
+            for group in __get_groups():
+                if group.Name == account:
+                    Account = group
+                    break
+
+        permission = __get_ns().new_instance_of('VisualSVN_PermissionEntry', Account=Account, AccessLevel=access_level)
+
+        Permissions.append(permission)
+
+    for r in __get_repositories():
+        if r.Name == repo_name:
+            r.SetSecurity(Path=path, Permissions=Permissions, ResetChildren=reset_children)
+            break
+
+
+def repo_get_children(repo_name, path):
+    children = []
+    for r in __get_repositories():
+        if r.Name == repo_name:
+            try:
+                for entry in r.GetChildren(path)[0]:
+                    children.append(VisualSVN_RepositoryEntry(entry))
+            except:
+                pass
+            break
+    return children
+
+
 if __name__ == '__main__':
     pass
