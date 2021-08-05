@@ -10,7 +10,27 @@
     <div class="container-fluid main-container">
         <div class="web2py_grid">
             {{if 'children' in globals():}}
-            {{=repo}} - {{=path}}
+            <div class="web2py_console">
+                <a class="dir"
+                   href="{{=URL(c='svn', f='show_repositories', user_signature=True)}}">{{=T('SVN Repositories')}}</a>
+                :
+                <a class="dir"
+                   href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode('/')], user_signature=True)}}">{{=repo}}</a>
+
+                {{dirs = path.split('/')}}
+                {{dirs.remove('')}}
+                {{if dirs:}}
+                {{ p = ''}}
+                {{ for i in range(len(dirs) - 1):}}
+                {{ p = p + '/' + dirs[i]}}
+                /
+                <a class="dir"
+                   href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(p)], user_signature=True)}}">{{=dirs[i]}}</a>
+                {{ pass}}
+                /
+                {{=dirs[-1]}}
+                {{pass}}
+            </div>
             <hr>
             <div class="web2py_table">
                 <div class="web2py_htmltable"
@@ -20,17 +40,14 @@
 
                         <tr class="w2p_odd odd">
                             <td>
+                                <img src="{{=URL('static','images/dir.png')}}">
                                 {{if path != '/':}}
                                 <a href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(svn_parent_path(path))], user_signature=True)}}">
-                                    <img src="{{=URL('static','images/dir.png')}}">
-                                    ..
-                                </a>
                                 {{else:}}
                                 <a href="{{=URL(c='svn', f='show_repositories', user_signature=True)}}">
-                                    <img src="{{=URL('static','images/dir.png')}}">
-                                    ..
-                                </a>
                                 {{pass}}
+                                    {{=T('Parent Directory')}}
+                                </a>
                             </td>
                             <td></td>
                         </tr>
@@ -44,8 +61,8 @@
                             {{pass}}
                             <td>
                                 {{if child.Kind==1:}}
+                                <img src="{{=URL('static','images/dir.png')}}">
                                 <a href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(child.Path)], user_signature=True)}}">
-                                    <img src="{{=URL('static','images/dir.png')}}">
                                     {{=child.Name}}
                                 </a>
                                 {{else:}}

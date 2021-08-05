@@ -277,6 +277,10 @@ li.w2p_grid_breadcrumb_elem {
     margin: 2px;
     padding: 6px 12px;
 }
+.web2py_console a.dir {
+    margin: 0px;
+    padding: 0px 0px;
+}
 #wiki_page_body {
     width: 600px;
     height: auto;

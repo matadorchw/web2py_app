@@ -153,4 +153,4 @@ def svn_repo_get_security(repo_name, path):
 
 def svn_parent_path(path):
     p = path[:path.rfind('/')]
-    return p and p or '/'
+    return p if p else '/'

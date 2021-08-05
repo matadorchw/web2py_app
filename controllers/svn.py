@@ -152,7 +152,7 @@ def show_path():
     folders, files = svn_repo_get_children(repo, path)
     folders.sort(key=lambda f: f.Name)
     files.sort(key=lambda f: f.Name)
-    return dict(title=T('SVN Path'), repo=repo, path=path, children=folders + files)
+    return dict(title=T('SVN Repositories'), repo=repo, path=path, children=folders + files)
 
 
 @auth.requires_login()
