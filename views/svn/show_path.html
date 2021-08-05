@@ -1,0 +1,72 @@
+{{extend 'layout.html'}}
+
+{{if 'title' in globals():}}
+<h1 align="center">{{=title}}</h1>
+{{pass}}
+
+
+<div class="col-lg-4"
+     style="background-color:white; margin: 0 auto 5px auto; box-shadow: 0 0 5px #a1a1a1; border-width: 10px; border-radius:5px;padding: 20px">
+    <div class="container-fluid main-container">
+        <div class="web2py_grid">
+            {{if 'children' in globals():}}
+            {{=repo}} - {{=path}}
+            <hr>
+            <div class="web2py_table">
+                <div class="web2py_htmltable"
+                     style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
+                    <table>
+                        <tbody>
+
+                        <tr class="w2p_odd odd">
+                            <td>
+                                {{if path != '/':}}
+                                <a href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(svn_parent_path(path))], user_signature=True)}}">
+                                    <img src="{{=URL('static','images/dir.png')}}">
+                                    ..
+                                </a>
+                                {{else:}}
+                                <a href="{{=URL(c='svn', f='show_repositories', user_signature=True)}}">
+                                    <img src="{{=URL('static','images/dir.png')}}">
+                                    ..
+                                </a>
+                                {{pass}}
+                            </td>
+                            <td></td>
+                        </tr>
+
+
+                        {{for r, child in enumerate(children):}}
+                        {{if r % 2 == 1:}}
+                        <tr class="w2p_odd odd with_id" id="{{=child.Name}}">
+                            {{else:}}
+                        <tr class="w2p_even even with_id" id="{{=child.Name}}">
+                            {{pass}}
+                            <td>
+                                {{if child.Kind==1:}}
+                                <a href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(child.Path)], user_signature=True)}}">
+                                    <img src="{{=URL('static','images/dir.png')}}">
+                                    {{=child.Name}}
+                                </a>
+                                {{else:}}
+                                <img src="{{=URL('static','images/file.png')}}">
+                                {{=child.Name}}
+                                {{pass}}
+                            </td>
+                            <td class="row_buttons" nowrap="nowrap">
+                                <a class="button btn btn-default btn-secondary"
+                                   href="{{=URL(c='svn', f='show_security', args=[repo, svn_encode(child.Path)], user_signature=True)}}">
+                                    {{=T('Permissions')}}
+                                </a>
+                            </td>
+                        </tr>
+                        {{pass}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {{pass}}
+        </div>
+    </div>
+</div>
+

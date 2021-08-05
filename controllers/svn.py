@@ -10,7 +10,7 @@ def create_user():
         if err_msg == 'succ':
             response.flash = T('Created successfully')
         else:
-            response.flash = svn_err_msg_decode(err_msg)
+            response.flash = svn_decode(err_msg)
 
     action = URL(c='svn', f='create_user_done')
     return dict(title=T('Create SVN User'), action=action)
@@ -28,7 +28,7 @@ def create_user_done():
         else:
             args.append('succ')
     else:
-        args.append(svn_err_msg_encode(T('name is empty').encode()))
+        args.append(svn_encode(T('name is empty').encode()))
     redirect(URL(c='svn', f='create_user', args=args, user_signature=True))
 
 
@@ -70,7 +70,7 @@ def create_group():
         if err_msg == 'succ':
             response.flash = T('Created successfully')
         else:
-            response.flash = svn_err_msg_decode(err_msg)
+            response.flash = svn_decode(err_msg)
 
     action = URL(c='svn', f='create_group_done')
     return dict(title=T('Create SVN Group'), action=action)
@@ -87,7 +87,7 @@ def create_group_done():
         else:
             args.append('succ')
     else:
-        args.append(svn_err_msg_encode(T('name is empty').encode()))
+        args.append(svn_encode(T('name is empty').encode()))
     redirect(URL(c='svn', f='create_group', args=args, user_signature=True))
 
 
@@ -117,7 +117,7 @@ def add_group_member():
 
     if len(request.args) > 1:
         err_msg = request.args[1]
-        response.flash = svn_err_msg_decode(err_msg)
+        response.flash = svn_decode(err_msg)
 
     users = svn_get_users()
     groups = svn_get_groups()
@@ -138,3 +138,25 @@ def add_group_member_done():
         args.append(err_msg)
 
     redirect(URL(c='svn', f='add_group_member', args=args, user_signature=True))
+
+
+@auth.requires_login()
+def show_repositories():
+    return dict(title=T('SVN Repositories'), repositories=svn_get_repositories())
+
+
+@auth.requires_login()
+def show_path():
+    repo = request.args[0]
+    path = svn_decode(request.args[1])
+    folders, files = svn_repo_get_children(repo, path)
+    folders.sort(key=lambda f: f.Name)
+    files.sort(key=lambda f: f.Name)
+    return dict(title=T('SVN Path'), repo=repo, path=path, children=folders + files)
+
+
+@auth.requires_login()
+def show_security():
+    repo = request.args[0]
+    path = svn_decode(request.args[1])
+    print(svn_repo_get_security(repo, path))

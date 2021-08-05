@@ -11,6 +11,7 @@ response.menu = [
         [
             [T('User'), False, URL('svn', 'show_users')],
             [T('Group'), False, URL('svn', 'show_groups')],
+            [T('Repository'), False, URL('svn', 'show_repositories')],
         ]
     ]
 ]

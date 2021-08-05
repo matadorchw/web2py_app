@@ -1,0 +1,50 @@
+{{extend 'layout.html'}}
+
+{{if 'title' in globals():}}
+<h1 align="center">{{=title}}</h1>
+{{pass}}
+
+{{if 'repositories' in globals():}}
+<div class="col-lg-4"
+     style="background-color:white; margin: 0 auto 5px auto; box-shadow: 0 0 5px #a1a1a1; border-width: 10px; border-radius:5px;padding: 20px">
+    <div class="container-fluid main-container">
+        <div class="web2py_grid">
+            <div class="web2py_table">
+                <div class="web2py_htmltable"
+                     style="width:100%;overflow-x:auto;-ms-overflow-x:scroll">
+                    <table>
+                        <thead>
+                        <tr class="">
+                            <th class="" width="60%">{{=T('Repository')}}</th>
+                            <th class=""></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{for r, repo in enumerate(repositories):}}
+                        {{if r % 2 ==0:}}
+                        <tr class="w2p_odd odd with_id" id="{{=repo}}">
+                        {{else:}}
+                        <tr class="w2p_even even with_id" id="{{=repo}}">
+                        {{pass}}
+                            <td>
+                                <a href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode('/')], user_signature=True)}}">
+                                    <img src="{{=URL('static','images/dir.png')}}">
+                                    {{=repo}}
+                                </a>
+                            </td>
+                            <td class="row_buttons" nowrap="nowrap">
+                                <a class="button btn btn-default btn-secondary"
+                                   href="{{=URL(c='svn', f='show_security', args=[repo, svn_encode('/')], user_signature=True)}}">
+                                    {{=T('Permissions')}}
+                                </a>
+                            </td>
+                        </tr>
+                        {{pass}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{pass}}
