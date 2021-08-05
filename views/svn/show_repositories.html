@@ -23,12 +23,12 @@
                         {{for r, repo in enumerate(repositories):}}
                         {{if r % 2 == 0:}}
                         <tr class="w2p_odd odd with_id" id="{{=repo}}">
-                        {{else:}}
+                            {{else:}}
                         <tr class="w2p_even even with_id" id="{{=repo}}">
-                        {{pass}}
+                            {{pass}}
                             <td>
+                                <img src="{{=URL('static','images/dir.png')}}">
                                 <a href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode('/')], user_signature=True)}}">
-                                    <img src="{{=URL('static','images/dir.png')}}">
                                     {{=repo}}
                                 </a>
                             </td>
