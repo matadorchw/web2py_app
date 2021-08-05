@@ -29,7 +29,7 @@
                         </thead>
                         <tbody>
                         {{for r, user in enumerate(users):}}
-                        {{if r % 2 ==0:}}
+                        {{if r % 2 == 0:}}
                         <tr class="w2p_odd odd with_id" id="{{=user}}">
                             {{else:}}
                         <tr class="w2p_even even with_id" id="{{=user}}">
@@ -66,7 +66,7 @@
                         </thead>
                         <tbody>
                         {{for r, group in enumerate(groups):}}
-                        {{if r % 2 ==0:}}
+                        {{if r % 2 == 0:}}
                         <tr class="w2p_odd odd with_id" id="{{=group}}">
                             {{else:}}
                         <tr class="w2p_even even with_id" id="{{=group}}">

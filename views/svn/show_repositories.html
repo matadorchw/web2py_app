@@ -21,7 +21,7 @@
                         </thead>
                         <tbody>
                         {{for r, repo in enumerate(repositories):}}
-                        {{if r % 2 ==0:}}
+                        {{if r % 2 == 0:}}
                         <tr class="w2p_odd odd with_id" id="{{=repo}}">
                         {{else:}}
                         <tr class="w2p_even even with_id" id="{{=repo}}">
