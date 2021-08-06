@@ -101,37 +101,6 @@ def svn_group_get_members_by_type(group_name):
     return users, groups
 
 
-def svn_repo_get_security_dump_all(name, path, kind=0, depth=0):
-    if depth == 0:
-        print(name)
-
-    if kind == 1:
-        print(' ' * depth * 2 + '/' + (path.split('/')[-1]), end='')
-    else:
-        print(' ' * depth * 2 + path, end='')
-
-    for p in svnhelper.repo_get_security(name, path):
-        print(f' [{p[0]} {p[1]}]', end='')
-    print()
-    files = []
-    folders = []
-    for entry in svnhelper.repo_get_children(name, path):
-        if entry.Kind == 1:
-            folders.append(entry)
-        elif entry.Kind == 0:
-            files.append(entry)
-
-    for folder in folders:
-        svn_repo_get_security_dump_all(name, folder.Path, kind=1, depth=depth + 1)
-
-    for file in files:
-        print(' ' * (depth + 1) * 2 + file.Name, end='')
-        print(f' {file.InheritedOnlyPermissions}', end='')
-        for p in svnhelper.repo_get_security(name, file.Path):
-            print(f' [{p[0]} {p[1]}]', end='')
-        print()
-
-
 def svn_get_repositories():
     return [name for name, _ in svnhelper.get_repositories()]
 

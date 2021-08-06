@@ -4,7 +4,7 @@
 <h1 align="center">{{=title}}</h1>
 {{pass}}
 
-<div class="col-lg-4"
+<div class="col-lg-8"
      style="background-color:white; margin: 0 auto 5px auto; box-shadow: 0 0 5px #a1a1a1; border-width: 10px; border-radius:5px;padding: 20px">
     <div class="container-fluid main-container">
         <div class="web2py_grid">
@@ -14,20 +14,36 @@
                    href="{{=URL(c='svn', f='show_repositories', user_signature=True)}}">{{=T('SVN Repositories')}}</a>
                 :
                 <a class="dir"
-                   href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode('/')], user_signature=True)}}">{{=repo}}</a>
+                   href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode('/')], user_signature=True)}}">
+                    {{=repo}}
+                    {{security = svn_repo_get_security(repo, '/')}}
+                    {{if security:}}
+                    <img src="{{=URL('static','images/permission.png')}}" title="{{=security}}">
+                    {{pass}}
+                </a>
 
                 {{dirs = path.split('/')}}
                 {{dirs.remove('')}}
                 {{if dirs:}}
-                {{  p = ''}}
-                {{  for i in range(len(dirs) - 1):}}
-                {{  p = p + '/' + dirs[i]}}
+                {{ p = ''}}
+                {{ for i in range(len(dirs) - 1):}}
+                {{ p = p + '/' + dirs[i]}}
                 /
                 <a class="dir"
-                   href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(p)], user_signature=True)}}">{{=dirs[i]}}</a>
-                {{  pass}}
+                   href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(p)], user_signature=True)}}">
+                    {{=dirs[i]}}
+                    {{security = svn_repo_get_security(repo, p)}}
+                    {{if security:}}
+                    <img src="{{=URL('static','images/permission.png')}}" title="{{=security}}">
+                    {{pass}}
+                </a>
+                {{ pass}}
                 /
-                {{  =dirs[-1]}}
+                {{ =dirs[-1]}}
+                {{pass}}
+                {{security = svn_repo_get_security(repo, path)}}
+                {{if security and path!='/':}}
+                <img src="{{=URL('static','images/permission.png')}}" title="{{=security}}">
                 {{pass}}
             </div>
             <hr>
@@ -58,15 +74,22 @@
                             {{else:}}
                         <tr class="w2p_even even with_id">
                             {{pass}}
+                            {{security=svn_repo_get_security(repo, child.Path)}}
                             <td width="100%">
                                 {{if child.Kind==1:}}
                                 <img src="{{=URL('static','images/dir.png')}}">
                                 <a href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(child.Path)], user_signature=True)}}">
                                     {{=child.Name}}
+                                    {{if security:}}
+                                    <img src="{{=URL('static','images/permission.png')}}" title="{{=security}}">
+                                    {{pass}}
                                 </a>
                                 {{else:}}
                                 <img src="{{=URL('static','images/file.png')}}">
                                 {{=child.Name}}
+                                {{if security:}}
+                                <img src="{{=URL('static','images/permission.png')}}" title="{{=security}}">
+                                {{pass}}
                                 {{pass}}
                             </td>
                             <td class="row_buttons" nowrap="nowrap">
