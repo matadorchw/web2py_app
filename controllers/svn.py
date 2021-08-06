@@ -159,4 +159,5 @@ def show_path():
 def show_security():
     repo = request.args[0]
     path = svn_decode(request.args[1])
-    print(svn_repo_get_security(repo, path))
+    security = svn_repo_get_security(repo, path)
+    return dict(title=T('SVN Security'), repo=repo, path=path, security=security)
