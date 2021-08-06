@@ -85,14 +85,15 @@
                                 {{=permission[0]}}
                             </td>
                             <td>
-                                <select class="form-control" disabled="disabled">
-                                    <option value="0" {{if permission[1]==0:}} selected="selected" {{pass}}>No Access
-                                    </option>
-                                    <option value="1" {{if permission[1]==1:}} selected="selected" {{pass}}>Read Only
-                                    </option>
-                                    <option value="2" {{if permission[1]==2:}} selected="selected" {{pass}}>Read/Write
-                                    </option>
-                                </select>
+                                {{=("No Access", "Read Only", "Read/Write")[permission[1]]}}
+<!--                                <select class="form-control" disabled="disabled">-->
+<!--                                    <option value="0" {{if permission[1]==0:}} selected="selected" {{pass}}>No Access-->
+<!--                                    </option>-->
+<!--                                    <option value="1" {{if permission[1]==1:}} selected="selected" {{pass}}>Read Only-->
+<!--                                    </option>-->
+<!--                                    <option value="2" {{if permission[1]==2:}} selected="selected" {{pass}}>Read/Write-->
+<!--                                    </option>-->
+<!--                                </select>-->
                             </td>
                             <!--                            <td class="row_buttons" nowrap="nowrap" width="20%">-->
                             <!--                                <a class="button btn btn-default btn-secondary"-->
