@@ -56,11 +56,19 @@
 <!--                    <span class="icon download icon-download glyphicon glyphicon-download"></span>-->
 <!--                    <span class="buttontext button" title="{{=T('Back')}}">{{=T('Save')}}</span>-->
 <!--                </a>-->
+                {{if path!='/':}}
                 <a class="button btn btn-default btn-secondary"
                    href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(svn_parent_path(path))], user_signature=True)}}">
                     <span class="icon arrowleft icon-arrow-left glyphicon glyphicon-arrow-left"></span>
                     <span class="buttontext button" title="{{=T('Back')}}">{{=T('Back')}}</span>
                 </a>
+                {{else:}}
+                <a class="button btn btn-default btn-secondary"
+                   href="{{=URL(c='svn', f='show_repositories', user_signature=True)}}">
+                    <span class="icon arrowleft icon-arrow-left glyphicon glyphicon-arrow-left"></span>
+                    <span class="buttontext button" title="{{=T('Back')}}">{{=T('Back')}}</span>
+                </a>
+                {{pass}}
             </div>
             <hr>
             <div class="web2py_table">
