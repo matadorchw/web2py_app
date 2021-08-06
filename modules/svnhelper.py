@@ -142,16 +142,19 @@ class VisualSVN_RepositoryEntry:
 
 
 def repo_get_security(repo_name, path):
+    pythoncom.CoInitialize()
     permissions = []
     for r in __get_repositories():
         if r.Name == repo_name:
             for p in r.GetSecurity(path)[0]:
                 permissions.append((p.Account.Name, p.AccessLevel))
             break
+    pythoncom.CoUninitialize()
     return permissions
 
 
 def repo_set_security(repo_name, path, permissions, reset_children=False):
+    pythoncom.CoInitialize()
     Permissions = []
     for account, access_level in permissions:
         Account = None
@@ -174,9 +177,10 @@ def repo_set_security(repo_name, path, permissions, reset_children=False):
         if r.Name == repo_name:
             r.SetSecurity(Path=path, Permissions=Permissions, ResetChildren=reset_children)
             break
-
+    pythoncom.CoUninitialize()
 
 def repo_get_children(repo_name, path):
+    pythoncom.CoInitialize()
     children = []
     for r in __get_repositories():
         if r.Name == repo_name:
@@ -186,6 +190,7 @@ def repo_get_children(repo_name, path):
             except:
                 pass
             break
+    pythoncom.CoUninitialize()
     return children
 
 

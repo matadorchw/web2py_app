@@ -15,18 +15,18 @@
                     <table>
                         <thead>
                         <tr class="">
-                            <th class="" width="60%">{{=T('Repository')}}</th>
+                            <th class="" width="100%">{{=T('Repository')}}</th>
                             <th class=""></th>
                         </tr>
                         </thead>
                         <tbody>
                         {{for r, repo in enumerate(repositories):}}
                         {{if r % 2 == 0:}}
-                        <tr class="w2p_odd odd with_id" id="{{=repo}}">
+                        <tr class="w2p_odd odd with_id">
                             {{else:}}
-                        <tr class="w2p_even even with_id" id="{{=repo}}">
+                        <tr class="w2p_even even with_id">
                             {{pass}}
-                            <td>
+                            <td width="100%">
                                 <img src="{{=URL('static','images/dir.png')}}">
                                 <a href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode('/')], user_signature=True)}}">
                                     {{=repo}}

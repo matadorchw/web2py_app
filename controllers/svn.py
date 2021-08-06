@@ -140,12 +140,12 @@ def add_group_member_done():
     redirect(URL(c='svn', f='add_group_member', args=args, user_signature=True))
 
 
-@auth.requires_login()
+@auth.requires_membership('administrators')
 def show_repositories():
     return dict(title=T('SVN Repositories'), repositories=svn_get_repositories())
 
 
-@auth.requires_login()
+@auth.requires_membership('administrators')
 def show_path():
     repo = request.args[0]
     path = svn_decode(request.args[1])
@@ -155,7 +155,7 @@ def show_path():
     return dict(title=T('SVN Repositories'), repo=repo, path=path, children=folders + files)
 
 
-@auth.requires_login()
+@auth.requires_membership('administrators')
 def show_security():
     repo = request.args[0]
     path = svn_decode(request.args[1])
