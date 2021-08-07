@@ -120,6 +120,33 @@ def svn_repo_get_security(repo_name, path):
     return svnhelper.repo_get_security(repo_name, path)
 
 
+def svn_repo_set_security(repo, path, permissions):
+    svnhelper.repo_set_security(repo, path, permissions)
+
+
 def svn_parent_path(path):
     p = path[:path.rfind('/')]
     return p if p else '/'
+
+
+def svn_repo_add_permission(repo, path, permission):
+    permissions = svn_repo_get_security(repo, path)
+    permissions.append(permission)
+    err_msg = None
+    try:
+        svn_repo_set_security(repo, path, permissions)
+    except wmi.x_wmi as e:
+        err_msg = svn_encode(e.com_error.args[2][2])
+    return err_msg
+
+
+def svn_repo_delete_permission(repo, path, permission):
+    permissions = svn_repo_get_security(repo, path)
+    permissions.remove(permission)
+
+    err_msg = None
+    try:
+        svn_repo_set_security(repo, path, permissions)
+    except wmi.x_wmi as e:
+        err_msg = svn_encode(e.com_error.args[2][2])
+    return err_msg

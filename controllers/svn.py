@@ -159,5 +159,69 @@ def show_path():
 def show_security():
     repo = request.args[0]
     path = svn_decode(request.args[1])
+    if len(request.args) > 2:
+        err_msg = request.args[2]
+        response.flash = svn_decode(err_msg)
     security = svn_repo_get_security(repo, path)
     return dict(title=T('SVN Security'), repo=repo, path=path, security=security)
+
+
+@auth.requires_membership('administrators')
+def add_permission():
+    repo = request.args[0]
+    path = svn_decode(request.args[1])
+    action = URL(c='svn', f='add_permission_done')
+    return dict(title=T('Add Permission'), action=action, repo=repo, path=path)
+
+
+def submit_permission_done(msg):
+    repo = request.vars['repo']
+    path = svn_decode(request.vars['path'])
+    account = request.vars['account']
+    permission = int(request.vars['permission'])
+
+    args = [repo, svn_encode(path)]
+    err_msg = svn_repo_add_permission(repo, path, (account, permission))
+    if not err_msg:
+        err_msg = svn_encode(msg)
+    args.append(err_msg)
+
+    redirect(URL(c='svn', f='show_security', args=args, user_signature=True))
+
+
+@auth.requires_membership('administrators')
+def add_permission_done():
+    submit_permission_done(T('Add permission successfully').encode())
+
+
+@auth.requires_membership('administrators')
+def edit_permission():
+    repo = request.args[0]
+    path = svn_decode(request.args[1])
+    account = request.args[2]
+    permission = int(request.args[3])
+
+    response.view = 'svn/add_permission.html'
+    action = URL(c='svn', f='edit_permission_done')
+    return dict(title=T('Add Permission'), action=action, repo=repo, path=path, account=account, permission=permission)
+
+
+@auth.requires_membership('administrators')
+def edit_permission_done():
+    submit_permission_done(T('Edit permission successfully').encode())
+
+
+@auth.requires_membership('administrators')
+def delete_permission():
+    repo = request.args[0]
+    path = svn_decode(request.args[1])
+    account = request.args[2]
+    permission = int(request.args[3])
+
+    args = [repo, svn_encode(path)]
+    err_msg = svn_repo_delete_permission(repo, path, (account, permission))
+    if not err_msg:
+        err_msg = svn_encode(T('Delete permission successfully').encode())
+    args.append(err_msg)
+
+    redirect(URL(c='svn', f='show_security', args=args, user_signature=True))

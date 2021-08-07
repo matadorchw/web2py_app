@@ -5,7 +5,7 @@
 {{pass}}
 
 {{if 'security' in globals():}}
-<div class="col-lg-8"
+<div class="col-lg-6"
      style="background-color:white; margin: 0 auto 5px auto; box-shadow: 0 0 5px #a1a1a1; border-width: 10px; border-radius:5px;padding: 20px">
     <div class="container-fluid main-container">
         <div class="web2py_grid">
@@ -52,10 +52,10 @@
                 {{pass}}
                 <hr>
                 <a class="button btn btn-default btn-secondary"
-                   href="{{=URL(c='svn', f='add_permission', user_signature=True)}}">
+                   href="{{=URL(c='svn', f='add_permission', args=[repo, svn_encode(path)], user_signature=True)}}">
                     <span class="icon plus icon-plus glyphicon glyphicon-plus"></span>
                     <span class="buttontext button"
-                          title="{{=T('Add Permmision')}}">{{=T('Add')}}</span>
+                          title="{{=T('Add Permission')}}">{{=T('Add')}}</span>
                 </a>
                 {{if path!='/':}}
                 <a class="button btn btn-default btn-secondary"
@@ -94,18 +94,18 @@
                                 {{=permission[0]}}
                             </td>
                             <td>
-                                {{=("No Access", "Read Only", "Read/Write")[permission[1]]}}
+                                {{=(T("No Access"), T("Read Only"), T("Read/Write"))[permission[1]]}}
                             </td>
                             <td class="row_buttons" nowrap="nowrap" width="20%">
                                 <a class="button btn btn-default btn-secondary"
-                                   href="{{=URL(c='svn', f='edit_permission', args=[repo, svn_encode(path), permission[0]], user_signature=True)}}">
+                                   href="{{=URL(c='svn', f='edit_permission', args=[repo, svn_encode(path), permission[0], permission[1]], user_signature=True)}}">
                                     {{=T('Edit')}}
                                 </a>
                                 <a class="button btn btn-default btn-secondary"
                                    data-w2p_confirm="default"
                                    data-w2p_disable_with="default"
                                    data-w2p_method="POST" data-w2p_remove="tr"
-                                   href="{{=URL(c='svn', f='delete_permission', args=[repo, svn_encode(path)], user_signature=True)}}">
+                                   href="{{=URL(c='svn', f='delete_permission', args=[repo, svn_encode(path), permission[0], permission[1]], user_signature=True)}}">
                                     {{=T('Delete')}}
                                 </a>
                             </td>
