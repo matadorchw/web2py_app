@@ -10,6 +10,26 @@
     <div class="container-fluid main-container">
         <div class="web2py_grid">
             <div class="web2py_console">
+                <a class="button btn btn-default btn-secondary"
+                   href="{{=URL(c='svn', f='add_permission', args=[repo, svn_encode(path)], user_signature=True)}}">
+                    <span class="icon plus icon-plus glyphicon glyphicon-plus"></span>
+                    <span class="buttontext button"
+                          title="{{=T('Add Permission')}}">{{=T('Add')}}</span>
+                </a>
+                {{if path!='/':}}
+                <a class="button btn btn-default btn-secondary"
+                   href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(svn_parent_path(path))], user_signature=True)}}">
+                    <span class="icon arrowleft icon-arrow-left glyphicon glyphicon-arrow-left"></span>
+                    <span class="buttontext button" title="{{=T('Back')}}">{{=T('Back')}}</span>
+                </a>
+                {{else:}}
+                <a class="button btn btn-default btn-secondary"
+                   href="{{=URL(c='svn', f='show_repositories', user_signature=True)}}">
+                    <span class="icon arrowleft icon-arrow-left glyphicon glyphicon-arrow-left"></span>
+                    <span class="buttontext button" title="{{=T('Back')}}">{{=T('Back')}}</span>
+                </a>
+                {{pass}}
+                <hr>
                 <a class="dir"
                    href="{{=URL(c='svn', f='show_repositories', user_signature=True)}}">
                     {{=T('SVN Repositories')}}
@@ -50,26 +70,6 @@
                 <img src="{{=URL('static','images/permission.png')}}"
                      title="{{=security}}">
                 {{pass}}
-                <hr>
-                <a class="button btn btn-default btn-secondary"
-                   href="{{=URL(c='svn', f='add_permission', args=[repo, svn_encode(path)], user_signature=True)}}">
-                    <span class="icon plus icon-plus glyphicon glyphicon-plus"></span>
-                    <span class="buttontext button"
-                          title="{{=T('Add Permission')}}">{{=T('Add')}}</span>
-                </a>
-                {{if path!='/':}}
-                <a class="button btn btn-default btn-secondary"
-                   href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(svn_parent_path(path))], user_signature=True)}}">
-                    <span class="icon arrowleft icon-arrow-left glyphicon glyphicon-arrow-left"></span>
-                    <span class="buttontext button" title="{{=T('Back')}}">{{=T('Back')}}</span>
-                </a>
-                {{else:}}
-                <a class="button btn btn-default btn-secondary"
-                   href="{{=URL(c='svn', f='show_repositories', user_signature=True)}}">
-                    <span class="icon arrowleft icon-arrow-left glyphicon glyphicon-arrow-left"></span>
-                    <span class="buttontext button" title="{{=T('Back')}}">{{=T('Back')}}</span>
-                </a>
-                {{pass}}
             </div>
             <hr>
             <div class="web2py_table">
@@ -94,7 +94,10 @@
                                 {{=permission[0]}}
                             </td>
                             <td>
-                                {{=(T("No Access"), T("Read Only"), T("Read/Write"))[permission[1]]}}
+                                {{=(T("No Access"),
+                                T("Read Only"),
+                                T("Read/Write")
+                                )[permission[1]]}}
                             </td>
                             <td class="row_buttons" nowrap="nowrap" width="20%">
                                 <a class="button btn btn-default btn-secondary"

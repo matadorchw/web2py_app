@@ -30,8 +30,15 @@
                     </select>
                     {{else:}}
                     <select class="form-control" name="account">
-                        {{for a in svn_get_users() + svn_get_groups():}}
-                        <option value="{{=a}}">{{=a}}</option>
+                        <option disabled="disabled">{{=T('Special')}}</option>
+                        <option value="Everyone">Everyone</option>
+                        <option disabled="disabled">{{=T('Users')}}</option>
+                        {{for user in svn_get_users():}}
+                        <option value="{{=user}}">{{=user}}</option>
+                        {{pass}}
+                        <option disabled="disabled">{{=T('Groups')}}</option>
+                        {{for group in svn_get_groups():}}
+                        <option value="{{=group}}">{{=group}}</option>
                         {{pass}}
                     </select>
                     {{pass}}

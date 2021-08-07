@@ -168,10 +168,12 @@ def repo_set_security(repo_name, path, permissions, reset_children=False):
                 if group.Name == account:
                     Account = group
                     break
-
-        permission = __get_ns().new_instance_of('VisualSVN_PermissionEntry', Account=Account, AccessLevel=access_level)
-
-        Permissions.append(permission)
+        if Account is None:
+            if account == 'Everyone':
+                Account = __get_ns().instances('VisualSVN_Everyone')[0]
+        if Account:
+            permission = __get_ns().new_instance_of('VisualSVN_PermissionEntry', Account=Account, AccessLevel=access_level)
+            Permissions.append(permission)
 
     for r in __get_repositories():
         if r.Name == repo_name:
