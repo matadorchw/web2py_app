@@ -8,8 +8,6 @@
 <div class="col-lg-6"
      style="background-color:white; margin: 0 auto 5px auto; box-shadow: 0 0 5px #a1a1a1; border-width: 10px; border-radius:5px;padding: 20px">
     <div>
-        {{=repo}} : {{=path}}
-        <hr>
         <div class="form_header row_buttons">
             <a class="button btn btn-default btn-secondary"
                href="{{=URL(c='svn', f='show_security', args=[repo, svn_encode(path)], user_signature=True)}}">
@@ -17,6 +15,8 @@
                 <span class="buttontext button" title="{{=T('Back')}}">{{=T('Back')}}</span>
             </a>
         </div>
+        <hr>
+        {{=repo}} : {{=path}}
         <hr>
         <form enctype="multipart/form-data" action="{{=action}}" method="post">
             <input value={{=repo}} type="hidden" name="repo"/>
