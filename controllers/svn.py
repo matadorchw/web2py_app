@@ -163,6 +163,22 @@ def show_security():
         err_msg = request.args[2]
         response.flash = svn_decode(err_msg)
     security = svn_repo_get_security(repo, path)
+
+    users = svn_get_users()
+    groups = svn_get_groups()
+
+    special_permission = []
+    users_permission = []
+    groups_permission = []
+    for s in security:
+        if s[0] == 'Everyone':
+            special_permission.append(s)
+        elif s[0] in users:
+            users_permission.append(s)
+        elif s[0] in groups:
+            groups_permission.append(s)
+    security = special_permission + users_permission + groups_permission
+
     return dict(title=T('SVN Security'), repo=repo, path=path, security=security)
 
 
@@ -203,7 +219,7 @@ def edit_permission():
 
     response.view = 'svn/add_permission.html'
     action = URL(c='svn', f='edit_permission_done')
-    return dict(title=T('Add Permission'), action=action, repo=repo, path=path, account=account, permission=permission)
+    return dict(title=T('Edit Permission'), action=action, repo=repo, path=path, account=account, permission=permission)
 
 
 @auth.requires_membership('administrators')

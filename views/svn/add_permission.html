@@ -50,15 +50,26 @@
                 <div class="col-sm-9">
                     {{if 'permission' in globals():}}
                     <select class="form-control" name="permission">
-                        <option value="0" {{if permission==0:}} selected="selected" {{pass}}>{{=T('No Access')}}</option>
-                        <option value="1" {{if permission==1:}} selected="selected" {{pass}}>{{=T('Read Only')}}</option>
-                        <option value="2" {{if permission==2:}} selected="selected" {{pass}}>{{=T('Read/Write')}}</option>
+                        <option value="0" {{if permission==0:}}
+                                selected="selected" disabled="disabled"
+                                {{pass}}>{{=T('No Access')}}
+                        </option>
+                        <option value="1" {{if permission==1:}}
+                                selected="selected" disabled="disabled"
+                                {{pass}}>{{=T('Read Only')}}
+                        </option>
+                        <option value="2" {{if permission==2:}}
+                                selected="selected" disabled="disabled"
+                                {{pass}}>{{=T('Read/Write')}}
+                        </option>
                     </select>
                     {{else:}}
                     <select class="form-control" name="permission">
                         <option value="0">{{=T('No Access')}}</option>
                         <option value="1">{{=T('Read Only')}}</option>
-                        <option value="2" selected="selected">{{=T('Read/Write')}}</option>
+                        <option value="2" selected="selected">
+                            {{=T('Read/Write')}}
+                        </option>
                     </select>
                     {{pass}}
                     <span class="help-block"></span>

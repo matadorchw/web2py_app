@@ -38,10 +38,10 @@
                 <a class="dir"
                    href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode('/')], user_signature=True)}}">
                     {{=repo}}
-                    {{security = svn_repo_get_security(repo, '/')}}
-                    {{if security:}}
+                    {{s = svn_repo_get_security(repo, '/')}}
+                    {{if s:}}
                     <img src="{{=URL('static','images/permission.png')}}"
-                         title="{{=security}}">
+                         title="{{=s}}">
                     {{pass}}
                 </a>
 
@@ -55,20 +55,20 @@
                 <a class="dir"
                    href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode(p)], user_signature=True)}}">
                     {{=dirs[i]}}
-                    {{security = svn_repo_get_security(repo, p)}}
-                    {{if security:}}
+                    {{s = svn_repo_get_security(repo, p)}}
+                    {{if s:}}
                     <img src="{{=URL('static','images/permission.png')}}"
-                         title="{{=security}}">
+                         title="{{=s}}">
                     {{pass}}
                 </a>
                 {{ pass}}
                 /
                 {{ =dirs[-1]}}
                 {{pass}}
-                {{security = svn_repo_get_security(repo, path)}}
-                {{if security and path!='/':}}
+                {{s = svn_repo_get_security(repo, path)}}
+                {{if s and path!='/':}}
                 <img src="{{=URL('static','images/permission.png')}}"
-                     title="{{=security}}">
+                     title="{{=s}}">
                 {{pass}}
             </div>
             <hr>

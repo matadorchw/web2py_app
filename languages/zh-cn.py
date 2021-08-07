@@ -116,6 +116,7 @@
 'E-mail': '电子邮件',
 'Edit': '修改',
 'Edit current record': '编辑当前记录',
+'Edit Permission': '修改权限',
 'Edit permission successfully': '修改权限成功',
 'Email and SMS': 'Email and SMS',
 'Email sent': 'Email sent',
