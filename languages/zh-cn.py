@@ -257,6 +257,7 @@
 'Save': '保存',
 'Save model as...': 'Save model as...',
 'Search': '查找',
+'Security': '安全',
 'Services': 'Services',
 'Set Password': '设密码',
 'Sign Up': 'Sign Up',

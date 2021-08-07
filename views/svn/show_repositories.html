@@ -26,20 +26,16 @@
                             {{else:}}
                         <tr class="w2p_even even with_id">
                             {{pass}}
-                            {{security=svn_repo_get_security(repo, '/')}}
                             <td width="100%">
                                 <img src="{{=URL('static','images/dir.png')}}">
                                 <a href="{{=URL(c='svn', f='show_path', args=[repo, svn_encode('/')], user_signature=True)}}">
                                     {{=repo}}
-                                    {{if security:}}
-                                    <img src="{{=URL('static','images/permission.png')}}" title="{{=security}}">
-                                    {{pass}}
                                 </a>
                             </td>
                             <td class="row_buttons" nowrap="nowrap">
                                 <a class="button btn btn-default btn-secondary"
                                    href="{{=URL(c='svn', f='show_security', args=[repo, svn_encode('/')], user_signature=True)}}">
-                                    {{=T('Permissions')}}
+                                    {{=T('Security')}}
                                 </a>
                             </td>
                         </tr>
