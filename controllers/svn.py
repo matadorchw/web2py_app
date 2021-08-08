@@ -5,8 +5,8 @@ def show_users():
 
 @auth.requires_login()
 def create_user():
-    if len(request.args) > 1:
-        err_msg = request.args[1]
+    if len(request.args) > 0:
+        err_msg = request.args[0]
         if err_msg == 'succ':
             response.flash = T('Created successfully')
         else:
@@ -18,7 +18,7 @@ def create_user():
 
 @auth.requires_login()
 def create_user_done():
-    args = ['done']
+    args = []
     name = request.vars['name']
     password = request.vars['password']
     if name.strip():
@@ -65,8 +65,8 @@ def show_groups():
 
 @auth.requires_login()
 def create_group():
-    if len(request.args) > 1:
-        err_msg = request.args[1]
+    if len(request.args) > 0:
+        err_msg = request.args[0]
         if err_msg == 'succ':
             response.flash = T('Created successfully')
         else:
@@ -78,7 +78,7 @@ def create_group():
 
 @auth.requires_login()
 def create_group_done():
-    args = ['done']
+    args = []
     name = request.vars['name']
     if name.strip():
         err_msg = svn_group_create(name)
@@ -194,13 +194,21 @@ def submit_permission_done(msg):
     repo = request.vars['repo']
     path = svn_decode(request.vars['path'])
     account = request.vars['account']
-    permission = int(request.vars['permission'])
+    permission = None
+    if 'permission' in request.vars:
+        permission = int(request.vars['permission'])
 
     args = [repo, svn_encode(path)]
-    err_msg = svn_repo_add_permission(repo, path, (account, permission))
+    if permission is None:
+        err_msg = svn_encode(T('please choose permission').encode())
+    else:
+        err_msg = svn_repo_add_permission(repo, path, (account, permission))
+
     if not err_msg:
         err_msg = svn_encode(msg)
-    args.append(err_msg)
+
+    if err_msg:
+        args.append(err_msg)
 
     redirect(URL(c='svn', f='show_security', args=args, user_signature=True))
 
@@ -238,6 +246,7 @@ def delete_permission():
     err_msg = svn_repo_delete_permission(repo, path, (account, permission))
     if not err_msg:
         err_msg = svn_encode(T('Delete permission successfully').encode())
-    args.append(err_msg)
+    if err_msg:
+        args.append(err_msg)
 
     redirect(URL(c='svn', f='show_security', args=args, user_signature=True))
